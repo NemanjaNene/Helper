@@ -198,32 +198,12 @@
             <!-- Messages Section -->
             <div id="messages-section" class="admin-section">
                 <div class="admin-header">
-                    <h1 class="admin-title">Poruke</h1>
+                    <h1 class="admin-title">Sve Konverzacije</h1>
+                    <p class="admin-subtitle">Klikni na konverzaciju da vidiš ceo chat</p>
                 </div>
 
-                <div class="messages-list">
-                    <div class="message-item">
-                        <div class="message-header">
-                            <div class="message-participants">
-                                <strong>Ana Marić</strong> → <strong>Marko Petrović</strong>
-                            </div>
-                            <div class="message-time">2 sata</div>
-                        </div>
-                        <div class="message-preview">
-                            Hvala vam na odličnoj usluzi! Definitivno ću vas pozvati ponovo.
-                        </div>
-                    </div>
-                    <div class="message-item">
-                        <div class="message-header">
-                            <div class="message-participants">
-                                <strong>Jovana Nikolić</strong> → <strong>Stefan Đorđević</strong>
-                            </div>
-                            <div class="message-time">5 sati</div>
-                        </div>
-                        <div class="message-preview">
-                            Kada biste mogli da dođete da sečete drva?
-                        </div>
-                    </div>
+                <div id="admin-conversations-list" class="messages-list">
+                    <!-- Conversations will be loaded here -->
                 </div>
             </div>
 
@@ -296,6 +276,24 @@
         </div>
     </div>
 
+    <!-- Chat View Modal -->
+    <div id="chat-view-modal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeChatModal()">&times;</span>
+            <div class="chat-view-container">
+                <div class="chat-view-header">
+                    <h2>Konverzacija</h2>
+                    <div class="chat-participants">
+                        <span id="chat-participant-1"></span> ↔ <span id="chat-participant-2"></span>
+                    </div>
+                </div>
+                <div class="chat-view-messages" id="chat-view-messages">
+                    <!-- Messages will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script>
         // Check admin authentication
@@ -339,6 +337,7 @@
             loadDashboardStats();
             loadUsersTable();
             loadServicesTable();
+            loadConversations();
         }
 
         function loadDashboardStats() {
@@ -498,6 +497,89 @@
 
         function saveSettings() {
             showAlert('Podešavanja su sačuvana!', 'success');
+        }
+
+        function loadConversations() {
+            const conversations = JSON.parse(localStorage.getItem('helper-conversations')) || [];
+            const conversationsList = document.getElementById('admin-conversations-list');
+            
+            if (!conversationsList) return;
+            
+            if (conversations.length === 0) {
+                conversationsList.innerHTML = '<p style="text-align: center; color: #6B7280; padding: 40px;">Nema konverzacija za prikaz</p>';
+                return;
+            }
+            
+            conversationsList.innerHTML = conversations.map(conv => {
+                const lastMessage = conv.messages[conv.messages.length - 1];
+                const timeAgo = getTimeAgo(lastMessage.timestamp);
+                
+                return `
+                    <div class="message-item" onclick="viewConversation('${conv.id}')">
+                        <div class="message-header">
+                            <div class="message-participants">
+                                <strong>${conv.user1Name}</strong> ↔ <strong>${conv.user2Name}</strong>
+                            </div>
+                            <div class="message-time">${timeAgo}</div>
+                        </div>
+                        <div class="message-preview">
+                            ${lastMessage.text}
+                        </div>
+                        <div class="message-count">
+                            <i class="fas fa-comments"></i> ${conv.messages.length} poruka
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function viewConversation(conversationId) {
+            const conversations = JSON.parse(localStorage.getItem('helper-conversations')) || [];
+            const conversation = conversations.find(c => c.id === conversationId);
+            
+            if (!conversation) return;
+            
+            document.getElementById('chat-participant-1').textContent = conversation.user1Name;
+            document.getElementById('chat-participant-2').textContent = conversation.user2Name;
+            
+            const messagesContainer = document.getElementById('chat-view-messages');
+            messagesContainer.innerHTML = conversation.messages.map(msg => {
+                const senderClass = msg.senderId === conversation.user1Id ? 'sent' : 'received';
+                const time = new Date(msg.timestamp).toLocaleTimeString('sr-RS', { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <div class="chat-message ${senderClass}">
+                        <div class="message-sender">${msg.senderName}</div>
+                        <div class="message-text">${msg.text}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('chat-view-modal').style.display = 'block';
+            
+            // Scroll to bottom
+            setTimeout(() => {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 100);
+        }
+
+        function closeChatModal() {
+            document.getElementById('chat-view-modal').style.display = 'none';
+        }
+
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const then = new Date(timestamp);
+            const diff = now - then;
+            
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 60) return `${minutes} min`;
+            if (hours < 24) return `${hours}h`;
+            return `${days}d`;
         }
 
         function logout() {

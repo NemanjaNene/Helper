@@ -140,11 +140,100 @@ function initializeApp() {
     const savedUsers = localStorage.getItem('helper-users');
     const savedUser = localStorage.getItem('helper-current-user');
     const savedBookings = localStorage.getItem('helper-bookings');
+    const savedConversations = localStorage.getItem('helper-conversations');
     
     services = savedServices ? JSON.parse(savedServices) : sampleServices;
     users = savedUsers ? JSON.parse(savedUsers) : sampleUsers;
     currentUser = savedUser ? JSON.parse(savedUser) : null;
     bookings = savedBookings ? JSON.parse(savedBookings) : [];
+    
+    // Initialize sample conversations if none exist
+    if (!savedConversations) {
+        const sampleConversations = [
+            {
+                id: 'conv-1',
+                user1Id: 1,
+                user1Name: 'Ana Marić',
+                user2Id: 2,
+                user2Name: 'Marko Petrović',
+                messages: [
+                    {
+                        id: 1,
+                        senderId: 1,
+                        senderName: 'Ana Marić',
+                        text: 'Zdravo! Vidim da tražite usluge čišćenja. Kada biste želeli da dođem?',
+                        timestamp: new Date(Date.now() - 7200000).toISOString()
+                    },
+                    {
+                        id: 2,
+                        senderId: 2,
+                        senderName: 'Marko Petrović',
+                        text: 'Zdravo! Možete li doći sutra u 10h?',
+                        timestamp: new Date(Date.now() - 7080000).toISOString()
+                    },
+                    {
+                        id: 3,
+                        senderId: 1,
+                        senderName: 'Ana Marić',
+                        text: 'Naravno! Sutra u 10h je u redu. Koliko je prostorija?',
+                        timestamp: new Date(Date.now() - 7020000).toISOString()
+                    },
+                    {
+                        id: 4,
+                        senderId: 2,
+                        senderName: 'Marko Petrović',
+                        text: '3 sobe, kuhinja i kupatilo. Cena?',
+                        timestamp: new Date(Date.now() - 6960000).toISOString()
+                    },
+                    {
+                        id: 5,
+                        senderId: 1,
+                        senderName: 'Ana Marić',
+                        text: '500 RSD po satu, trebalo bi oko 4 sata. Ukupno 2000 RSD.',
+                        timestamp: new Date(Date.now() - 6900000).toISOString()
+                    },
+                    {
+                        id: 6,
+                        senderId: 2,
+                        senderName: 'Marko Petrović',
+                        text: 'Odlično! Vidimo se sutra u 10h. Hvala!',
+                        timestamp: new Date(Date.now() - 6840000).toISOString()
+                    }
+                ]
+            },
+            {
+                id: 'conv-2',
+                user1Id: 3,
+                user1Name: 'Jovana Nikolić',
+                user2Id: 4,
+                user2Name: 'Stefan Đorđević',
+                messages: [
+                    {
+                        id: 1,
+                        senderId: 3,
+                        senderName: 'Jovana Nikolić',
+                        text: 'Kada biste mogli da dođete da sečete drva?',
+                        timestamp: new Date(Date.now() - 18000000).toISOString()
+                    },
+                    {
+                        id: 2,
+                        senderId: 4,
+                        senderName: 'Stefan Đorđević',
+                        text: 'Mogu sutra popodne oko 15h. Da li vam odgovara?',
+                        timestamp: new Date(Date.now() - 17700000).toISOString()
+                    },
+                    {
+                        id: 3,
+                        senderId: 3,
+                        senderName: 'Jovana Nikolić',
+                        text: 'Perfektno! Vidimo se sutra.',
+                        timestamp: new Date(Date.now() - 17400000).toISOString()
+                    }
+                ]
+            }
+        ];
+        localStorage.setItem('helper-conversations', JSON.stringify(sampleConversations));
+    }
     
     // Update UI based on login status
     updateNavigation();
