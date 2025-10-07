@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helper - Platforma za kućne usluge</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Helper</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Početna</a>
+                <a href="#services" class="nav-link">Usluge</a>
+                <a href="#about" class="nav-link">O nama</a>
+                <a href="#contact" class="nav-link">Kontakt</a>
+                <div class="nav-buttons">
+                    <button class="btn btn-outline" id="login-btn">Prijavi se</button>
+                    <button class="btn btn-primary" id="register-btn">Registruj se</button>
+                </div>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Pronađi pouzdane pomoćnike za sve kućne poslove</h1>
+                <p class="hero-subtitle">Povezujemo ljude koji pružaju kvalitetne kućne usluge sa onima koji ih traže</p>
+                <div class="hero-search">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Šta ti treba? (čišćenje, peglanje, čuvanje dece...)" id="hero-search">
+                        <button class="btn btn-primary" onclick="performSearch(document.getElementById('hero-search').value)">Pretraži</button>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Pouzdanih pomoćnika</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">Zadovoljnih klijenata</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.9</span>
+                        <span class="stat-label">Prosečna ocena</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-card">
+                    <div class="card-header">
+                        <img src="https://via.placeholder.com/60x60/4F46E5/FFFFFF?text=AM" alt="Ana Marić" class="profile-img">
+                        <div class="profile-info">
+                            <h3>Ana Marić</h3>
+                            <p>Čišćenje kuće</p>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span>4.9 (23 recenzije)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">Profesionalno čišćenje kuće i stanova. 5 godina iskustva. Dostupna svakim danom.</p>
+                    <div class="card-price">500 RSD/sat</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Popularne usluge</h2>
+            <div class="services-grid" id="services-grid">
+                <!-- Services will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Kako funkcioniše?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>1. Pretraži usluge</h3>
+                    <p>Pronađi pomoćnike u svojoj oblasti ili pretraži po tipu usluge</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3>2. Pregledaj profile</h3>
+                    <p>Pročitaj recenzije, pogledaj ocene i biraj najbolje pomoćnike</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>3. Kontaktiraj</h3>
+                    <p>Pošalji poruku i dogovori detalje sa izabranim pomoćnikom</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>4. Započni posao</h3>
+                    <p>Oceni uslugu nakon završetka i pomozi drugima da donesu pravu odluku</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Zašto Helper?</h2>
+                    <p>Helper je platforma koja povezuje ljude koji pružaju kvalitetne kućne usluge sa onima koji ih traže. Naš cilj je da olakšamo pronalaženje pouzdanih pomoćnika za sve vaše kućne potrebe.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <h4>Pouzdanost</h4>
+                                <p>Svi naši pomoćnici su verifikovani i ocenjeni</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Fleksibilnost</h4>
+                                <p>Dostupni 24/7 za sve vaše potrebe</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <h4>Kvalitet</h4>
+                                <p>Provereni pomoćnici sa visokim ocenama</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://via.placeholder.com/500x400/4F46E5/FFFFFF?text=Helper+Team" alt="Helper Team">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Kontaktiraj nas</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Telefon</h4>
+                            <p>+381 11 123 4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@helper.rs</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Adresa</h4>
+                            <p>Knez Mihailova 1, Beograd</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Vaše ime" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Vaš email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Vaša poruka" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Pošalji poruku</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-hands-helping"></i>
+                        <span>Helper</span>
+                    </div>
+                    <p>Platforma za povezivanje ljudi koji pružaju kućne usluge sa onima koji ih traže.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Usluge</h4>
+                    <ul>
+                        <li><a href="#">Čišćenje kuće</a></li>
+                        <li><a href="#">Peglanje</a></li>
+                        <li><a href="#">Čuvanje dece</a></li>
+                        <li><a href="#">Čuvanje ljubimaca</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Kompanija</h4>
+                    <ul>
+                        <li><a href="#">O nama</a></li>
+                        <li><a href="#">Karijere</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Pratite nas</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Helper. Sva prava zadržana.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Prijavi se</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Lozinka" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Prijavi se</button>
+            </form>
+            <p>Nemaš nalog? <a href="#" id="show-register">Registruj se</a></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Registruj se</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Ime i prezime" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Lozinka" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Potvrdi lozinku" required>
+                </div>
+                <div class="form-group">
+                    <div class="radio-group">
+                        <label class="radio-pill">
+                            <input type="radio" name="user-type" value="client" checked>
+                            <span>Tražim usluge</span>
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="user-type" value="provider">
+                            <span>Pružam usluge</span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Registruj se</button>
+            </form>
+            <p>Već imaš nalog? <a href="#" id="show-login">Prijavi se</a></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

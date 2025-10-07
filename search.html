@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pretraga usluga - Helper</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Helper</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Početna</a>
+                <a href="#services" class="nav-link">Usluge</a>
+                <a href="#about" class="nav-link">O nama</a>
+                <a href="#contact" class="nav-link">Kontakt</a>
+                <div class="nav-buttons">
+                    <button class="btn btn-outline" id="login-btn">Prijavi se</button>
+                    <button class="btn btn-primary" id="register-btn">Registruj se</button>
+                </div>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-header">
+                <h1>Pronađi pomoćnike</h1>
+                <p>Pretraži pouzdane pomoćnike za sve vaše kućne potrebe</p>
+            </div>
+            
+            <div class="search-filters">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>Šta tražiš?</label>
+                        <input type="text" id="search-input" placeholder="npr. čišćenje, peglanje, čuvanje dece...">
+                    </div>
+                    <div class="filter-group">
+                        <label>Lokacija</label>
+                        <select id="location-filter">
+                            <option value="">Sve lokacije</option>
+                            <option value="beograd">Beograd</option>
+                            <option value="novi-sad">Novi Sad</option>
+                            <option value="nis">Niš</option>
+                            <option value="kragujevac">Kragujevac</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Cena po satu</label>
+                        <select id="price-filter">
+                            <option value="">Sve cene</option>
+                            <option value="0-300">Do 300 RSD</option>
+                            <option value="300-500">300-500 RSD</option>
+                            <option value="500-800">500-800 RSD</option>
+                            <option value="800+">Preko 800 RSD</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="performSearch()">
+                        <i class="fas fa-search"></i> Pretraži
+                    </button>
+                </div>
+            </div>
+            
+            <div class="search-results">
+                <div class="results-header">
+                    <h2>Rezultati pretrage</h2>
+                    <div class="results-count">
+                        <span id="results-count">0</span> pomoćnika pronađeno
+                    </div>
+                </div>
+                
+                <div class="results-grid" id="results-grid">
+                    <!-- Results will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Prijavi se</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Lozinka" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Prijavi se</button>
+            </form>
+            <p>Nemaš nalog? <a href="#" id="show-register">Registruj se</a></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Registruj se</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Ime i prezime" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Lozinka" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Potvrdi lozinku" required>
+                </div>
+                <div class="form-group">
+                    <div class="radio-group">
+                        <label class="radio-pill">
+                            <input type="radio" name="user-type" value="client" checked>
+                            <span>Tražim usluge</span>
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="user-type" value="provider">
+                            <span>Pružam usluge</span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Registruj se</button>
+            </form>
+            <p>Već imaš nalog? <a href="#" id="show-login">Prijavi se</a></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Search page specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSearchResults();
+            setupSearchEventListeners();
+        });
+
+        function loadSearchResults() {
+            const resultsGrid = document.getElementById('results-grid');
+            const resultsCount = document.getElementById('results-count');
+            
+            if (!resultsGrid) return;
+            
+            // Get services from main script
+            const services = JSON.parse(localStorage.getItem('helper-services')) || [];
+            
+            resultsGrid.innerHTML = '';
+            resultsCount.textContent = services.length;
+            
+            services.forEach(service => {
+                const resultCard = createResultCard(service);
+                resultsGrid.appendChild(resultCard);
+            });
+        }
+
+        function createResultCard(service) {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.innerHTML = `
+                <div class="result-header">
+                    <div class="result-profile">
+                        <img src="${service.provider.avatar}" alt="${service.provider.name}" class="result-avatar">
+                        <div class="result-info">
+                            <h3>${service.provider.name}</h3>
+                            <p>${service.provider.location}</p>
+                        </div>
+                    </div>
+                    <div class="result-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>${service.rating} (${service.reviews})</span>
+                    </div>
+                </div>
+                <div class="result-content">
+                    <h4>${service.name}</h4>
+                    <p class="result-description">${service.description}</p>
+                </div>
+                <div class="result-footer">
+                    <div class="result-price">${service.price}</div>
+                    <div class="result-actions">
+                        <button class="btn btn-outline btn-small" onclick="contactProvider('${service.provider.name}')">
+                            <i class="fas fa-envelope"></i> Kontakt
+                        </button>
+                        <button class="btn btn-primary btn-small" onclick="viewProfile('${service.provider.name}')">
+                            <i class="fas fa-user"></i> Profil
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function setupSearchEventListeners() {
+            // Search input
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+            
+            // Filter changes
+            const filters = ['location-filter', 'price-filter'];
+            filters.forEach(filterId => {
+                const filter = document.getElementById(filterId);
+                if (filter) {
+                    filter.addEventListener('change', performSearch);
+                }
+            });
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const location = document.getElementById('location-filter').value;
+            const priceRange = document.getElementById('price-filter').value;
+            
+            const services = JSON.parse(localStorage.getItem('helper-services')) || [];
+            let filteredServices = services;
+            
+            // Filter by search term
+            if (searchTerm) {
+                filteredServices = filteredServices.filter(service => 
+                    service.name.toLowerCase().includes(searchTerm) ||
+                    service.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Filter by location
+            if (location) {
+                filteredServices = filteredServices.filter(service => 
+                    service.provider.location.toLowerCase().includes(location)
+                );
+            }
+            
+            // Filter by price
+            if (priceRange) {
+                const [min, max] = priceRange.split('-').map(p => parseInt(p));
+                filteredServices = filteredServices.filter(service => {
+                    const price = parseInt(service.price);
+                    if (max) {
+                        return price >= min && price <= max;
+                    } else {
+                        return price >= min;
+                    }
+                });
+            }
+            
+            displaySearchResults(filteredServices);
+        }
+
+        function displaySearchResults(services) {
+            const resultsGrid = document.getElementById('results-grid');
+            const resultsCount = document.getElementById('results-count');
+            
+            if (!resultsGrid) return;
+            
+            resultsGrid.innerHTML = '';
+            resultsCount.textContent = services.length;
+            
+            if (services.length === 0) {
+                resultsGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>Nema rezultata</h3>
+                        <p>Pokušajte sa drugim kriterijumima pretrage</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            services.forEach(service => {
+                const resultCard = createResultCard(service);
+                resultsGrid.appendChild(resultCard);
+            });
+        }
+
+        function contactProvider(providerName) {
+            alert(`Kontaktiranje: ${providerName}`);
+        }
+
+        function viewProfile(providerName) {
+            alert(`Pregled profila: ${providerName}`);
+        }
+    </script>
+</body>
+</html>

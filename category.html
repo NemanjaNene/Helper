@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategorija usluga - Helper</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Helper</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Početna</a>
+                <a href="search.html" class="nav-link">Pretraga</a>
+                <a href="#about" class="nav-link">O nama</a>
+                <a href="#contact" class="nav-link">Kontakt</a>
+                <div class="nav-buttons">
+                    <button class="btn btn-outline" id="login-btn">Prijavi se</button>
+                    <button class="btn btn-primary" id="register-btn">Registruj se</button>
+                </div>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Category Header -->
+    <section class="category-header">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Početna</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="category-name">Kategorija</span>
+            </div>
+            <div class="category-info">
+                <div class="category-icon">
+                    <i id="category-icon" class="fas fa-broom"></i>
+                </div>
+                <div class="category-details">
+                    <h1 id="category-title">Čišćenje kuće</h1>
+                    <p id="category-description">Pronađite pouzdane pomoćnike za čišćenje vašeg doma</p>
+                    <div class="category-stats">
+                        <span class="stat">
+                            <i class="fas fa-users"></i>
+                            <span id="providers-count">12</span> pružalaca
+                        </span>
+                        <span class="stat">
+                            <i class="fas fa-star"></i>
+                            <span id="avg-rating">4.8</span> prosečna ocena
+                        </span>
+                        <span class="stat">
+                            <i class="fas fa-clock"></i>
+                            <span id="avg-price">500</span> RSD/sat
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="category-filters">
+        <div class="container">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label>Lokacija</label>
+                    <select id="location-filter">
+                        <option value="">Sve lokacije</option>
+                        <option value="beograd">Beograd</option>
+                        <option value="novi-sad">Novi Sad</option>
+                        <option value="nis">Niš</option>
+                        <option value="kragujevac">Kragujevac</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Cena po satu</label>
+                    <select id="price-filter">
+                        <option value="">Sve cene</option>
+                        <option value="0-300">Do 300 RSD</option>
+                        <option value="300-500">300-500 RSD</option>
+                        <option value="500-800">500-800 RSD</option>
+                        <option value="800+">Preko 800 RSD</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Dostupnost</label>
+                    <select id="availability-filter">
+                        <option value="">Svi</option>
+                        <option value="today">Danas</option>
+                        <option value="tomorrow">Sutra</option>
+                        <option value="this-week">Ove nedelje</option>
+                        <option value="weekend">Vikend</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Ocena</label>
+                    <select id="rating-filter">
+                        <option value="">Sve ocene</option>
+                        <option value="5">5 zvezda</option>
+                        <option value="4">4+ zvezda</option>
+                        <option value="3">3+ zvezda</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i> Filtriraj
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Providers List -->
+    <section class="providers-section">
+        <div class="container">
+            <div class="providers-header">
+                <h2>Pružaoci usluga</h2>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="switchView('grid')">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" onclick="switchView('list')">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="providers-grid" id="providers-grid">
+                <!-- Providers will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <!-- Provider Details Modal -->
+    <div id="provider-modal" class="modal">
+        <div class="modal-content large">
+            <span class="close">&times;</span>
+            <div class="provider-details">
+                <div class="provider-header">
+                    <img id="modal-avatar" src="" alt="" class="provider-avatar">
+                    <div class="provider-info">
+                        <h2 id="modal-name"></h2>
+                        <p id="modal-location"></p>
+                        <div class="provider-rating">
+                            <div class="stars" id="modal-rating"></div>
+                            <span id="modal-reviews"></span>
+                        </div>
+                        <div class="provider-price">
+                            <span id="modal-price"></span> po satu
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="provider-tabs">
+                    <button class="tab-btn active" onclick="switchProviderTab('about')">O meni</button>
+                    <button class="tab-btn" onclick="switchProviderTab('schedule')">Raspored</button>
+                    <button class="tab-btn" onclick="switchProviderTab('reviews')">Recenzije</button>
+                </div>
+                
+                <div class="provider-content">
+                    <div id="about-tab" class="tab-content active">
+                        <h3>Opis</h3>
+                        <p id="modal-description"></p>
+                        
+                        <h3>Usluge</h3>
+                        <div class="services-list" id="modal-services"></div>
+                        
+                        <h3>Kontakt</h3>
+                        <div class="contact-info">
+                            <p><i class="fas fa-phone"></i> <span id="modal-phone"></span></p>
+                            <p><i class="fas fa-envelope"></i> <span id="modal-email"></span></p>
+                        </div>
+                    </div>
+                    
+                    <div id="schedule-tab" class="tab-content">
+                        <h3>Raspored dostupnosti</h3>
+                        <div class="calendar-container">
+                            <div class="calendar-header">
+                                <button onclick="previousWeek()"><i class="fas fa-chevron-left"></i></button>
+                                <h4 id="current-week"></h4>
+                                <button onclick="nextWeek()"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <div class="calendar-grid" id="calendar-grid">
+                                <!-- Calendar will be generated here -->
+                            </div>
+                            <div class="calendar-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color available"></div>
+                                    <span>Dostupan</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color busy"></div>
+                                    <span>Zauzet</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color selected"></div>
+                                    <span>Izabran</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="reviews-tab" class="tab-content">
+                        <h3>Recenzije</h3>
+                        <div class="reviews-list" id="modal-reviews-list">
+                            <!-- Reviews will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="provider-actions">
+                    <button class="btn btn-outline" onclick="contactProvider()">
+                        <i class="fas fa-envelope"></i> Kontakt
+                    </button>
+                    <button class="btn btn-primary" onclick="bookProvider()">
+                        <i class="fas fa-calendar-plus"></i> Rezerviši
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Rezerviši termin</h2>
+            <form id="booking-form">
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input type="date" id="booking-date" required>
+                </div>
+                <div class="form-group">
+                    <label>Vreme početka</label>
+                    <select id="booking-start-time" required>
+                        <option value="">Izaberite vreme</option>
+                        <option value="08:00">08:00</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Trajanje (sati)</label>
+                    <select id="booking-duration" required>
+                        <option value="1">1 sat</option>
+                        <option value="2">2 sata</option>
+                        <option value="3">3 sata</option>
+                        <option value="4">4 sata</option>
+                        <option value="5">5 sati</option>
+                        <option value="6">6 sati</option>
+                        <option value="8">8 sati</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Napomena</label>
+                    <textarea id="booking-notes" rows="3" placeholder="Dodatne informacije..."></textarea>
+                </div>
+                <div class="booking-summary">
+                    <h4>Rezime rezervacije</h4>
+                    <div class="summary-item">
+                        <span>Pružalac:</span>
+                        <span id="booking-provider-name"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Datum:</span>
+                        <span id="booking-summary-date"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Vreme:</span>
+                        <span id="booking-summary-time"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Trajanje:</span>
+                        <span id="booking-summary-duration"></span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Ukupno:</span>
+                        <span id="booking-total-price"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Potvrdi rezervaciju</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Category page specific functionality
+        let currentCategory = '';
+        let currentProviders = [];
+        let selectedProvider = null;
+        let currentWeek = new Date();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategoryFromURL();
+            loadProviders();
+            setupCategoryEventListeners();
+        });
+
+        function loadCategoryFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category') || 'cleaning';
+            
+            currentCategory = category;
+            updateCategoryInfo(category);
+        }
+
+        function updateCategoryInfo(category) {
+            const categoryData = {
+                'cleaning': {
+                    name: 'Čišćenje kuće',
+                    icon: 'fas fa-broom',
+                    description: 'Pronađite pouzdane pomoćnike za čišćenje vašeg doma',
+                    providers: 12,
+                    rating: 4.8,
+                    price: 500
+                },
+                'babysitting': {
+                    name: 'Čuvanje dece',
+                    icon: 'fas fa-baby',
+                    description: 'Pouzdani pomoćnici za čuvanje dece svih uzrasta',
+                    providers: 8,
+                    rating: 4.9,
+                    price: 400
+                },
+                'cooking': {
+                    name: 'Kuvanje',
+                    icon: 'fas fa-utensils',
+                    description: 'Profesionalni kuvari za pripremu obroka',
+                    providers: 6,
+                    rating: 4.7,
+                    price: 450
+                },
+                'ironing': {
+                    name: 'Peglanje',
+                    icon: 'fas fa-tshirt',
+                    description: 'Usluge peglanja odeće i posteljine',
+                    providers: 5,
+                    rating: 4.6,
+                    price: 300
+                },
+                'petcare': {
+                    name: 'Čuvanje ljubimaca',
+                    icon: 'fas fa-paw',
+                    description: 'Brižna negovanje vaših ljubimaca',
+                    providers: 7,
+                    rating: 4.8,
+                    price: 350
+                },
+                'woodcutting': {
+                    name: 'Sečenje drva',
+                    icon: 'fas fa-tree',
+                    description: 'Sečenje i priprema drva za ogrev',
+                    providers: 4,
+                    rating: 4.5,
+                    price: 600
+                }
+            };
+
+            const data = categoryData[category] || categoryData['cleaning'];
+            
+            document.getElementById('category-name').textContent = data.name;
+            document.getElementById('category-title').textContent = data.name;
+            document.getElementById('category-description').textContent = data.description;
+            document.getElementById('category-icon').className = data.icon;
+            document.getElementById('providers-count').textContent = data.providers;
+            document.getElementById('avg-rating').textContent = data.rating;
+            document.getElementById('avg-price').textContent = data.price;
+        }
+
+        function loadProviders() {
+            const providers = getProvidersForCategory(currentCategory);
+            currentProviders = providers;
+            displayProviders(providers);
+        }
+
+        function getProvidersForCategory(category) {
+            // Sample data - in real app this would come from API
+            const allProviders = [
+                {
+                    id: 1,
+                    name: 'Ana Marić',
+                    avatar: 'https://via.placeholder.com/120x120/4F46E5/FFFFFF?text=AM',
+                    location: 'Beograd',
+                    rating: 4.9,
+                    reviews: 23,
+                    price: 500,
+                    description: 'Profesionalno čišćenje kuće i stanova. 5 godina iskustva. Dostupna svakim danom.',
+                    phone: '+381 11 123 4567',
+                    email: 'ana@example.com',
+                    services: ['Čišćenje kuće', 'Peglanje', 'Organizacija'],
+                    availability: generateAvailability(),
+                    category: 'cleaning'
+                },
+                {
+                    id: 2,
+                    name: 'Milica Petrović',
+                    avatar: 'https://via.placeholder.com/120x120/10B981/FFFFFF?text=MP',
+                    location: 'Novi Sad',
+                    rating: 4.8,
+                    reviews: 15,
+                    price: 450,
+                    description: 'Odličan pomoćnik sa iskustvom u čišćenju i organizaciji doma.',
+                    phone: '+381 21 987 6543',
+                    email: 'milica@example.com',
+                    services: ['Čišćenje kuće', 'Organizacija'],
+                    availability: generateAvailability(),
+                    category: 'cleaning'
+                },
+                {
+                    id: 3,
+                    name: 'Jovana Nikolić',
+                    avatar: 'https://via.placeholder.com/120x120/F59E0B/FFFFFF?text=JN',
+                    location: 'Beograd',
+                    rating: 4.9,
+                    reviews: 31,
+                    price: 400,
+                    description: 'Iskusna čuvalica dece sa medicinskim obrazovanjem. Volim decu i imam strpljenja.',
+                    phone: '+381 11 555 1234',
+                    email: 'jovana@example.com',
+                    services: ['Čuvanje dece', 'Pomoć sa domaćim zadacima'],
+                    availability: generateAvailability(),
+                    category: 'babysitting'
+                },
+                {
+                    id: 4,
+                    name: 'Marko Jovanović',
+                    avatar: 'https://via.placeholder.com/120x120/EF4444/FFFFFF?text=MJ',
+                    location: 'Niš',
+                    rating: 4.7,
+                    reviews: 18,
+                    price: 350,
+                    description: 'Volim životinje i imam iskustvo sa psima i mačkama. Dostupan 24/7.',
+                    phone: '+381 18 777 8888',
+                    email: 'marko@example.com',
+                    services: ['Čuvanje pasa', 'Čuvanje mačaka', 'Šetnja'],
+                    availability: generateAvailability(),
+                    category: 'petcare'
+                },
+                {
+                    id: 5,
+                    name: 'Stefan Đorđević',
+                    avatar: 'https://via.placeholder.com/120x120/8B5CF6/FFFFFF?text=SĐ',
+                    location: 'Kragujevac',
+                    rating: 4.8,
+                    reviews: 12,
+                    price: 600,
+                    description: 'Profesionalno sečenje drva. Imam sve potrebne alate i iskustvo.',
+                    phone: '+381 34 999 0000',
+                    email: 'stefan@example.com',
+                    services: ['Sečenje drva', 'Priprema za ogrev', 'Čišćenje dvorišta'],
+                    availability: generateAvailability(),
+                    category: 'woodcutting'
+                },
+                {
+                    id: 6,
+                    name: 'Sofija Radović',
+                    avatar: 'https://via.placeholder.com/120x120/EC4899/FFFFFF?text=SR',
+                    location: 'Beograd',
+                    rating: 4.9,
+                    reviews: 25,
+                    price: 450,
+                    description: 'Kuvam već 10 godina. Specijalizovana za domaću kuhinju i zdrave obroke.',
+                    phone: '+381 11 333 4444',
+                    email: 'sofija@example.com',
+                    services: ['Kuvanje', 'Priprema obroka', 'Dijetetska kuhinja'],
+                    availability: generateAvailability(),
+                    category: 'cooking'
+                }
+            ];
+
+            return allProviders.filter(provider => provider.category === category);
+        }
+
+        function generateAvailability() {
+            // Generate sample availability data
+            const availability = {};
+            const today = new Date();
+            
+            for (let i = 0; i < 14; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                availability[dateStr] = {};
+                for (let hour = 8; hour <= 18; hour++) {
+                    const timeStr = `${hour.toString().padStart(2, '0')}:00`;
+                    // Random availability (70% chance of being available)
+                    availability[dateStr][timeStr] = Math.random() > 0.3;
+                }
+            }
+            
+            return availability;
+        }
+
+        function displayProviders(providers) {
+            const grid = document.getElementById('providers-grid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            providers.forEach(provider => {
+                const card = createProviderCard(provider);
+                grid.appendChild(card);
+            });
+        }
+
+        function createProviderCard(provider) {
+            const card = document.createElement('div');
+            card.className = 'provider-card';
+            card.innerHTML = `
+                <div class="provider-card-header">
+                    <img src="${provider.avatar}" alt="${provider.name}" class="provider-avatar">
+                    <div class="provider-info">
+                        <h3>${provider.name}</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> ${provider.location}</p>
+                        <div class="provider-rating">
+                            <div class="stars">
+                                ${generateStars(provider.rating)}
+                            </div>
+                            <span>${provider.rating} (${provider.reviews})</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="provider-card-body">
+                    <p class="provider-description">${provider.description}</p>
+                    <div class="provider-services">
+                        ${provider.services.map(service => `<span class="service-tag">${service}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="provider-card-footer">
+                    <div class="provider-price">${provider.price} RSD/sat</div>
+                    <div class="provider-actions">
+                        <button class="btn btn-outline btn-small" onclick="viewProvider(${provider.id})">
+                            <i class="fas fa-eye"></i> Pregled
+                        </button>
+                        <button class="btn btn-primary btn-small" onclick="bookProvider(${provider.id})">
+                            <i class="fas fa-calendar-plus"></i> Rezerviši
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        function viewProvider(providerId) {
+            const provider = currentProviders.find(p => p.id === providerId);
+            if (!provider) return;
+            
+            selectedProvider = provider;
+            showProviderModal(provider);
+        }
+
+        function showProviderModal(provider) {
+            const modal = document.getElementById('provider-modal');
+            
+            // Populate modal data
+            document.getElementById('modal-avatar').src = provider.avatar;
+            document.getElementById('modal-name').textContent = provider.name;
+            document.getElementById('modal-location').textContent = provider.location;
+            document.getElementById('modal-rating').innerHTML = generateStars(provider.rating);
+            document.getElementById('modal-reviews').textContent = `(${provider.reviews} recenzija)`;
+            document.getElementById('modal-price').textContent = provider.price;
+            document.getElementById('modal-description').textContent = provider.description;
+            document.getElementById('modal-phone').textContent = provider.phone;
+            document.getElementById('modal-email').textContent = provider.email;
+            
+            // Services
+            const servicesList = document.getElementById('modal-services');
+            servicesList.innerHTML = provider.services.map(service => 
+                `<span class="service-tag">${service}</span>`
+            ).join('');
+            
+            // Generate calendar
+            generateCalendar(provider.availability);
+            
+            modal.style.display = 'block';
+        }
+
+        function generateCalendar(availability) {
+            const calendarGrid = document.getElementById('calendar-grid');
+            if (!calendarGrid) return;
+            
+            calendarGrid.innerHTML = '';
+            
+            // Generate week view
+            const days = ['Ponedeljak', 'Utorak', 'Sreda', 'Četvrtak', 'Petak', 'Subota', 'Nedelja'];
+            const hours = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+            
+            // Header
+            const headerRow = document.createElement('div');
+            headerRow.className = 'calendar-header-row';
+            headerRow.innerHTML = '<div class="time-slot"></div>' + 
+                days.map(day => `<div class="day-header">${day}</div>`).join('');
+            calendarGrid.appendChild(headerRow);
+            
+            // Time slots
+            hours.forEach(hour => {
+                const timeRow = document.createElement('div');
+                timeRow.className = 'calendar-time-row';
+                
+                let rowHTML = `<div class="time-slot">${hour}</div>`;
+                
+                days.forEach((day, dayIndex) => {
+                    const date = new Date(currentWeek);
+                    date.setDate(currentWeek.getDate() - currentWeek.getDay() + 1 + dayIndex);
+                    const dateStr = date.toISOString().split('T')[0];
+                    
+                    const isAvailable = availability[dateStr] && availability[dateStr][hour];
+                    const cellClass = isAvailable ? 'available' : 'busy';
+                    
+                    rowHTML += `<div class="calendar-cell ${cellClass}" 
+                        onclick="selectTimeSlot('${dateStr}', '${hour}')"
+                        data-date="${dateStr}" 
+                        data-time="${hour}">
+                        ${isAvailable ? '✓' : '✗'}
+                    </div>`;
+                });
+                
+                timeRow.innerHTML = rowHTML;
+                calendarGrid.appendChild(timeRow);
+            });
+            
+            updateWeekDisplay();
+        }
+
+        function selectTimeSlot(date, time) {
+            // Remove previous selection
+            document.querySelectorAll('.calendar-cell.selected').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+            
+            // Add selection to clicked cell
+            const cell = document.querySelector(`[data-date="${date}"][data-time="${time}"]`);
+            if (cell && cell.classList.contains('available')) {
+                cell.classList.add('selected');
+            }
+        }
+
+        function previousWeek() {
+            currentWeek.setDate(currentWeek.getDate() - 7);
+            generateCalendar(selectedProvider.availability);
+        }
+
+        function nextWeek() {
+            currentWeek.setDate(currentWeek.getDate() + 7);
+            generateCalendar(selectedProvider.availability);
+        }
+
+        function updateWeekDisplay() {
+            const startOfWeek = new Date(currentWeek);
+            startOfWeek.setDate(currentWeek.getDate() - currentWeek.getDay() + 1);
+            
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            
+            const weekDisplay = document.getElementById('current-week');
+            if (weekDisplay) {
+                weekDisplay.textContent = `${startOfWeek.toLocaleDateString('sr-RS')} - ${endOfWeek.toLocaleDateString('sr-RS')}`;
+            }
+        }
+
+        function switchProviderTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName + '-tab');
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const activeBtn = document.querySelector(`[onclick*="${tabName}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+        }
+
+        function bookProvider(providerId) {
+            const provider = currentProviders.find(p => p.id === providerId);
+            if (!provider) return;
+            
+            selectedProvider = provider;
+            showBookingModal(provider);
+        }
+
+        function showBookingModal(provider) {
+            const modal = document.getElementById('booking-modal');
+            
+            document.getElementById('booking-provider-name').textContent = provider.name;
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('booking-date').min = today;
+            
+            modal.style.display = 'block';
+        }
+
+        function contactProvider() {
+            if (selectedProvider) {
+                alert(`Kontaktiranje: ${selectedProvider.name}\nTelefon: ${selectedProvider.phone}\nEmail: ${selectedProvider.email}`);
+            }
+        }
+
+        function applyFilters() {
+            const location = document.getElementById('location-filter').value;
+            const priceRange = document.getElementById('price-filter').value;
+            const availability = document.getElementById('availability-filter').value;
+            const rating = document.getElementById('rating-filter').value;
+            
+            let filtered = currentProviders;
+            
+            if (location) {
+                filtered = filtered.filter(p => p.location.toLowerCase().includes(location));
+            }
+            
+            if (priceRange) {
+                const [min, max] = priceRange.split('-').map(p => parseInt(p));
+                filtered = filtered.filter(p => {
+                    if (max) {
+                        return p.price >= min && p.price <= max;
+                    } else {
+                        return p.price >= min;
+                    }
+                });
+            }
+            
+            if (rating) {
+                const minRating = parseInt(rating);
+                filtered = filtered.filter(p => p.rating >= minRating);
+            }
+            
+            displayProviders(filtered);
+        }
+
+        function switchView(viewType) {
+            const grid = document.getElementById('providers-grid');
+            const buttons = document.querySelectorAll('.view-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (viewType === 'list') {
+                grid.classList.add('list-view');
+            } else {
+                grid.classList.remove('list-view');
+            }
+        }
+
+        function setupCategoryEventListeners() {
+            // Close modals
+            const closeButtons = document.querySelectorAll('.close');
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const modal = e.target.closest('.modal');
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+            
+            // Booking form
+            const bookingForm = document.getElementById('booking-form');
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', handleBooking);
+            }
+            
+            // Update booking summary
+            const bookingInputs = ['booking-date', 'booking-start-time', 'booking-duration'];
+            bookingInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.addEventListener('change', updateBookingSummary);
+                }
+            });
+        }
+
+        function handleBooking(e) {
+            e.preventDefault();
+            
+            const date = document.getElementById('booking-date').value;
+            const startTime = document.getElementById('booking-start-time').value;
+            const duration = parseInt(document.getElementById('booking-duration').value);
+            const notes = document.getElementById('booking-notes').value;
+            
+            if (selectedProvider) {
+                const totalPrice = selectedProvider.price * duration;
+                
+                alert(`Rezervacija potvrđena!\n\nPružalac: ${selectedProvider.name}\nDatum: ${date}\nVreme: ${startTime}\nTrajanje: ${duration} sati\nUkupno: ${totalPrice} RSD\n\nNapomena: ${notes}`);
+                
+                document.getElementById('booking-modal').style.display = 'none';
+            }
+        }
+
+        function updateBookingSummary() {
+            const date = document.getElementById('booking-date').value;
+            const startTime = document.getElementById('booking-start-time').value;
+            const duration = parseInt(document.getElementById('booking-duration').value);
+            
+            if (date && startTime && duration && selectedProvider) {
+                document.getElementById('booking-summary-date').textContent = new Date(date).toLocaleDateString('sr-RS');
+                document.getElementById('booking-summary-time').textContent = startTime;
+                document.getElementById('booking-summary-duration').textContent = `${duration} sati`;
+                
+                const totalPrice = selectedProvider.price * duration;
+                document.getElementById('booking-total-price').textContent = `${totalPrice} RSD`;
+            }
+        }
+    </script>
+</body>
+</html>

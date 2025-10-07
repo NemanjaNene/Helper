@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Helper</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Helper Admin</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Početna</a>
+                <div class="nav-buttons">
+                    <div class="user-menu">
+                        <img src="https://via.placeholder.com/40x40/4F46E5/FFFFFF?text=AD" alt="Admin" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                        <span>Admin</span>
+                        <div class="dropdown">
+                            <button class="dropdown-btn"><i class="fas fa-chevron-down"></i></button>
+                            <div class="dropdown-content">
+                                <a href="#" onclick="logout()">Odjavi se</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <ul class="admin-nav">
+                <li><a href="#" class="active" onclick="showAdminSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a></li>
+                <li><a href="#" onclick="showAdminSection('users')">
+                    <i class="fas fa-users"></i> Korisnici
+                </a></li>
+                <li><a href="#" onclick="showAdminSection('services')">
+                    <i class="fas fa-briefcase"></i> Usluge
+                </a></li>
+                <li><a href="#" onclick="showAdminSection('messages')">
+                    <i class="fas fa-comments"></i> Poruke
+                </a></li>
+                <li><a href="#" onclick="showAdminSection('reviews')">
+                    <i class="fas fa-star"></i> Recenzije
+                </a></li>
+                <li><a href="#" onclick="showAdminSection('settings')">
+                    <i class="fas fa-cog"></i> Podešavanja
+                </a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="admin-section active">
+                <div class="admin-header">
+                    <h1 class="admin-title">Dashboard</h1>
+                    <div class="admin-actions">
+                        <button class="btn btn-primary" onclick="refreshData()">
+                            <i class="fas fa-sync-alt"></i> Osveži
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-card-number" id="total-users">0</div>
+                        <div class="stat-card-label">Ukupno korisnika</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="stat-card-number" id="total-services">0</div>
+                        <div class="stat-card-label">Aktivne usluge</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="stat-card-number" id="total-messages">0</div>
+                        <div class="stat-card-label">Poruke</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-card-number" id="avg-rating">0</div>
+                        <div class="stat-card-label">Prosečna ocena</div>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h3>Nedavna aktivnost</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <i class="fas fa-user-plus"></i>
+                            <div class="activity-content">
+                                <p>Novi korisnik se registrovao</p>
+                                <span class="activity-time">2 sata</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div class="activity-content">
+                                <p>Nova usluga je dodana</p>
+                                <span class="activity-time">5 sati</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-comment"></i>
+                            <div class="activity-content">
+                                <p>Nova poruka je poslata</p>
+                                <span class="activity-time">1 dan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users-section" class="admin-section">
+                <div class="admin-header">
+                    <h1 class="admin-title">Korisnici</h1>
+                    <div class="admin-actions">
+                        <button class="btn btn-primary" onclick="addUser()">
+                            <i class="fas fa-plus"></i> Dodaj korisnika
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Ime</th>
+                                <th>Email</th>
+                                <th>Tip</th>
+                                <th>Lokacija</th>
+                                <th>Datum registracije</th>
+                                <th>Status</th>
+                                <th>Akcije</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div id="services-section" class="admin-section">
+                <div class="admin-header">
+                    <h1 class="admin-title">Usluge</h1>
+                    <div class="admin-actions">
+                        <button class="btn btn-primary" onclick="addService()">
+                            <i class="fas fa-plus"></i> Dodaj uslugu
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Naziv</th>
+                                <th>Pružalac</th>
+                                <th>Cena</th>
+                                <th>Ocena</th>
+                                <th>Status</th>
+                                <th>Akcije</th>
+                            </tr>
+                        </thead>
+                        <tbody id="services-table-body">
+                            <!-- Services will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div id="messages-section" class="admin-section">
+                <div class="admin-header">
+                    <h1 class="admin-title">Poruke</h1>
+                </div>
+
+                <div class="messages-list">
+                    <div class="message-item">
+                        <div class="message-header">
+                            <div class="message-participants">
+                                <strong>Ana Marić</strong> → <strong>Marko Petrović</strong>
+                            </div>
+                            <div class="message-time">2 sata</div>
+                        </div>
+                        <div class="message-preview">
+                            Hvala vam na odličnoj usluzi! Definitivno ću vas pozvati ponovo.
+                        </div>
+                    </div>
+                    <div class="message-item">
+                        <div class="message-header">
+                            <div class="message-participants">
+                                <strong>Jovana Nikolić</strong> → <strong>Stefan Đorđević</strong>
+                            </div>
+                            <div class="message-time">5 sati</div>
+                        </div>
+                        <div class="message-preview">
+                            Kada biste mogli da dođete da sečete drva?
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div id="reviews-section" class="admin-section">
+                <div class="admin-header">
+                    <h1 class="admin-title">Recenzije</h1>
+                </div>
+
+                <div class="reviews-list">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="review-user">
+                                <img src="https://via.placeholder.com/40x40/4F46E5/FFFFFF?text=MP" alt="Marko" class="review-avatar">
+                                <div>
+                                    <strong>Marko Petrović</strong>
+                                    <div class="review-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-time">1 dan</div>
+                        </div>
+                        <div class="review-content">
+                            <p>Ana je odličan pomoćnik! Kuća je bila savršeno očišćena. Preporučujem!</p>
+                        </div>
+                        <div class="review-service">
+                            <strong>Usluga:</strong> Čišćenje kuće
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings-section" class="admin-section">
+                <div class="admin-header">
+                    <h1 class="admin-title">Podešavanja</h1>
+                </div>
+
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label>Naziv platforme</label>
+                        <input type="text" value="Helper" id="platform-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email za kontakt</label>
+                        <input type="email" value="info@helper.rs" id="contact-email">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon za kontakt</label>
+                        <input type="tel" value="+381 11 123 4567" id="contact-phone">
+                    </div>
+                    <div class="form-group">
+                        <label>Adresa</label>
+                        <input type="text" value="Knez Mihailova 1, Beograd" id="contact-address">
+                    </div>
+                    <div class="form-group">
+                        <label>Opis platforme</label>
+                        <textarea rows="4" id="platform-description">Platforma za povezivanje ljudi koji pružaju kućne usluge sa onima koji ih traže.</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="saveSettings()">
+                        <i class="fas fa-save"></i> Sačuvaj podešavanja
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Admin page specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminData();
+            setupAdminEventListeners();
+        });
+
+        function loadAdminData() {
+            loadDashboardStats();
+            loadUsersTable();
+            loadServicesTable();
+        }
+
+        function loadDashboardStats() {
+            const users = JSON.parse(localStorage.getItem('helper-users')) || [];
+            const services = JSON.parse(localStorage.getItem('helper-services')) || [];
+            
+            document.getElementById('total-users').textContent = users.length;
+            document.getElementById('total-services').textContent = services.length;
+            document.getElementById('total-messages').textContent = '0'; // Placeholder
+            document.getElementById('avg-rating').textContent = '4.8'; // Placeholder
+        }
+
+        function loadUsersTable() {
+            const users = JSON.parse(localStorage.getItem('helper-users')) || [];
+            const tbody = document.getElementById('users-table-body');
+            
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>
+                        <div class="user-info">
+                            <img src="${user.avatar}" alt="${user.name}" class="table-avatar">
+                            <span>${user.name}</span>
+                        </div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span class="status-badge ${user.type === 'provider' ? 'status-active' : 'status-pending'}">
+                            ${user.type === 'provider' ? 'Pružalac' : 'Klijent'}
+                        </span>
+                    </td>
+                    <td>${user.location}</td>
+                    <td>${new Date(user.joined).toLocaleDateString('sr-RS')}</td>
+                    <td>
+                        <span class="status-badge status-active">Aktivan</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline btn-small" onclick="editUser(${user.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="deleteUser(${user.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadServicesTable() {
+            const services = JSON.parse(localStorage.getItem('helper-services')) || [];
+            const tbody = document.getElementById('services-table-body');
+            
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            services.forEach(service => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${service.id}</td>
+                    <td>${service.name}</td>
+                    <td>${service.provider.name}</td>
+                    <td>${service.price}</td>
+                    <td>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <span>${service.rating}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-active">Aktivan</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline btn-small" onclick="editService(${service.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="deleteService(${service.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function setupAdminEventListeners() {
+            // Navigation
+            const navLinks = document.querySelectorAll('.admin-nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = link.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    showAdminSection(section);
+                });
+            });
+        }
+
+        function showAdminSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.admin-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            const selectedSection = document.getElementById(sectionName + '-section');
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+            }
+            
+            // Update navigation
+            const navLinks = document.querySelectorAll('.admin-nav a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            const activeLink = document.querySelector(`[onclick*="${sectionName}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+
+        function refreshData() {
+            loadAdminData();
+            showAlert('Podaci su osveženi!', 'success');
+        }
+
+        function addUser() {
+            alert('Dodavanje novog korisnika');
+        }
+
+        function editUser(userId) {
+            alert(`Uređivanje korisnika ID: ${userId}`);
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Da li ste sigurni da želite da obrišete ovog korisnika?')) {
+                showAlert('Korisnik je obrisan!', 'success');
+            }
+        }
+
+        function addService() {
+            alert('Dodavanje nove usluge');
+        }
+
+        function editService(serviceId) {
+            alert(`Uređivanje usluge ID: ${serviceId}`);
+        }
+
+        function deleteService(serviceId) {
+            if (confirm('Da li ste sigurni da želite da obrišete ovu uslugu?')) {
+                showAlert('Usluga je obrisana!', 'success');
+            }
+        }
+
+        function saveSettings() {
+            showAlert('Podešavanja su sačuvana!', 'success');
+        }
+
+        function logout() {
+            if (confirm('Da li ste sigurni da želite da se odjavite?')) {
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
