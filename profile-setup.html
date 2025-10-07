@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podešavanje profila - Helper</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Helper</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Početna</a>
+                <div class="nav-buttons" id="nav-buttons"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Setup Section -->
+    <section class="profile-setup-page">
+        <div class="container">
+            <div class="setup-header">
+                <h1>Podešavanje profila</h1>
+                <p>Popuni informacije o sebi i uslugama koje pružaš</p>
+            </div>
+
+            <div class="setup-container">
+                <!-- Avatar Upload -->
+                <div class="avatar-upload-section">
+                    <div class="avatar-upload">
+                        <img id="avatar-preview" src="https://via.placeholder.com/150/4F46E5/FFFFFF?text=?" alt="Avatar">
+                        <div class="avatar-overlay">
+                            <i class="fas fa-camera"></i>
+                            <span>Promeni sliku</span>
+                        </div>
+                        <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                    </div>
+                    <p class="avatar-hint">Klikni na sliku da dodaš svoju fotografiju</p>
+                </div>
+
+                <!-- Profile Form -->
+                <form id="profile-setup-form" class="profile-setup-form">
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Osnove informacije</h3>
+                        
+                        <div class="form-group">
+                            <label>Ime i prezime *</label>
+                            <input type="text" id="full-name" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" id="email" required readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Telefon *</label>
+                                <input type="tel" id="phone" placeholder="+381 11 123 4567" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Lokacija *</label>
+                            <input type="text" id="location" placeholder="Npr. Beograd, Novi Sad..." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>O meni *</label>
+                            <textarea id="description" rows="4" placeholder="Napiši nešto o sebi, svom iskustvu i zašto si najbolji za posao..." required></textarea>
+                            <small>Preporučujemo minimum 100 karaktera</small>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-briefcase"></i> Moje usluge</h3>
+                        
+                        <div class="services-input">
+                            <div class="form-group">
+                                <label>Dodaj uslugu</label>
+                                <div class="service-add-row">
+                                    <select id="service-category">
+                                        <option value="">Izaberi kategoriju</option>
+                                        <option value="Čišćenje kuće">Čišćenje kuće</option>
+                                        <option value="Peglanje">Peglanje</option>
+                                        <option value="Čuvanje dece">Čuvanje dece</option>
+                                        <option value="Čuvanje ljubimaca">Čuvanje ljubimaca</option>
+                                        <option value="Kuvanje">Kuvanje</option>
+                                        <option value="Sečenje drva">Sečenje drva</option>
+                                        <option value="Vrtlarstvo">Vrtlarstvo</option>
+                                        <option value="Popravke">Popravke</option>
+                                        <option value="Ostalo">Ostalo</option>
+                                    </select>
+                                    <input type="number" id="service-price" placeholder="Cena po satu (RSD)" min="0">
+                                    <button type="button" class="btn btn-primary" onclick="addService()">
+                                        <i class="fas fa-plus"></i> Dodaj
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="services-list" id="services-list">
+                                <!-- Services will be added here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-clock"></i> Dostupnost (opciono)</h3>
+                        
+                        <div class="availability-grid">
+                            <label class="availability-item">
+                                <input type="checkbox" value="Ponedeljak">
+                                <span>Ponedeljak</span>
+                            </label>
+                            <label class="availability-item">
+                                <input type="checkbox" value="Utorak">
+                                <span>Utorak</span>
+                            </label>
+                            <label class="availability-item">
+                                <input type="checkbox" value="Sreda">
+                                <span>Sreda</span>
+                            </label>
+                            <label class="availability-item">
+                                <input type="checkbox" value="Četvrtak">
+                                <span>Četvrtak</span>
+                            </label>
+                            <label class="availability-item">
+                                <input type="checkbox" value="Petak">
+                                <span>Petak</span>
+                            </label>
+                            <label class="availability-item">
+                                <input type="checkbox" value="Subota">
+                                <span>Subota</span>
+                            </label>
+                            <label class="availability-item">
+                                <input type="checkbox" value="Nedelja">
+                                <span>Nedelja</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'">Otkaži</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Sačuvaj profil
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <script>
+        let userServices = [];
+        let avatarBase64 = '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkIfProvider();
+            loadUserData();
+            setupAvatarUpload();
+            setupForm();
+            updateNavigation();
+        });
+
+        function checkIfProvider() {
+            const currentUser = JSON.parse(localStorage.getItem('helper-current-user'));
+            
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            if (currentUser.type !== 'provider') {
+                alert('Ova stranica je samo za pružaoce usluga!');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function loadUserData() {
+            const currentUser = JSON.parse(localStorage.getItem('helper-current-user'));
+            
+            if (currentUser) {
+                document.getElementById('full-name').value = currentUser.name || '';
+                document.getElementById('email').value = currentUser.email || '';
+                document.getElementById('phone').value = currentUser.phone || '';
+                document.getElementById('location').value = currentUser.location || '';
+                document.getElementById('description').value = currentUser.description || '';
+                
+                if (currentUser.avatar) {
+                    document.getElementById('avatar-preview').src = currentUser.avatar;
+                    avatarBase64 = currentUser.avatar;
+                }
+                
+                if (currentUser.services) {
+                    userServices = currentUser.services.map(s => ({
+                        category: s.split(' - ')[0],
+                        price: s.split(' - ')[1] || '500 RSD/sat'
+                    }));
+                    displayServices();
+                }
+            }
+        }
+
+        function setupAvatarUpload() {
+            const avatarUpload = document.querySelector('.avatar-upload');
+            const avatarInput = document.getElementById('avatar-input');
+            const avatarPreview = document.getElementById('avatar-preview');
+
+            avatarUpload.addEventListener('click', () => {
+                avatarInput.click();
+            });
+
+            avatarInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        avatarBase64 = e.target.result;
+                        avatarPreview.src = avatarBase64;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function addService() {
+            const category = document.getElementById('service-category').value;
+            const price = document.getElementById('service-price').value;
+
+            if (!category) {
+                alert('Molimo izaberite kategoriju usluge!');
+                return;
+            }
+
+            if (!price || price <= 0) {
+                alert('Molimo unesite cenu po satu!');
+                return;
+            }
+
+            userServices.push({
+                category: category,
+                price: `${price} RSD/sat`
+            });
+
+            displayServices();
+
+            // Reset inputs
+            document.getElementById('service-category').value = '';
+            document.getElementById('service-price').value = '';
+        }
+
+        function displayServices() {
+            const servicesList = document.getElementById('services-list');
+            
+            if (userServices.length === 0) {
+                servicesList.innerHTML = '<p class="no-services">Još nisi dodao usluge</p>';
+                return;
+            }
+
+            servicesList.innerHTML = userServices.map((service, index) => `
+                <div class="service-item">
+                    <div class="service-info">
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>${service.category}</strong> - ${service.price}</span>
+                    </div>
+                    <button type="button" class="btn-remove" onclick="removeService(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeService(index) {
+            userServices.splice(index, 1);
+            displayServices();
+        }
+
+        function setupForm() {
+            document.getElementById('profile-setup-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                if (userServices.length === 0) {
+                    alert('Molimo dodajte bar jednu uslugu!');
+                    return;
+                }
+
+                const currentUser = JSON.parse(localStorage.getItem('helper-current-user'));
+                const users = JSON.parse(localStorage.getItem('helper-users')) || [];
+
+                // Update user data
+                const updatedUser = {
+                    ...currentUser,
+                    name: document.getElementById('full-name').value,
+                    phone: document.getElementById('phone').value,
+                    location: document.getElementById('location').value,
+                    description: document.getElementById('description').value,
+                    avatar: avatarBase64 || currentUser.avatar,
+                    services: userServices.map(s => `${s.category} - ${s.price}`),
+                    profileCompleted: true
+                };
+
+                // Update in users array
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = updatedUser;
+                }
+
+                // Save to localStorage
+                localStorage.setItem('helper-current-user', JSON.stringify(updatedUser));
+                localStorage.setItem('helper-users', JSON.stringify(users));
+
+                alert('Profil uspešno sačuvan!');
+                window.location.href = 'index.html';
+            });
+        }
+
+        function updateNavigation() {
+            const currentUser = JSON.parse(localStorage.getItem('helper-current-user'));
+            const navButtons = document.getElementById('nav-buttons');
+            
+            if (!navButtons) return;
+            
+            if (currentUser) {
+                navButtons.innerHTML = `
+                    <div class="user-menu">
+                        <img src="${currentUser.avatar}" alt="${currentUser.name}" class="user-avatar">
+                        <span style="font-weight: 500; color: #374151;">${currentUser.name}</span>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

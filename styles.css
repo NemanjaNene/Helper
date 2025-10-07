@@ -82,6 +82,19 @@ body {
     gap: 10px;
 }
 
+.provider-badge {
+    background: linear-gradient(135deg, #4F46E5, #7C3AED);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
 .user-avatar {
     width: 40px;
     height: 40px;
@@ -2344,6 +2357,254 @@ body {
     
     .booking-details {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Profile Setup Page */
+.profile-setup-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+    padding: 100px 0 60px;
+}
+
+.setup-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.setup-header h1 {
+    font-size: 2.5rem;
+    color: #1F2937;
+    margin-bottom: 10px;
+}
+
+.setup-header p {
+    font-size: 1.1rem;
+    color: #6B7280;
+}
+
+.setup-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-upload-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.avatar-upload {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.avatar-upload:hover {
+    transform: scale(1.05);
+}
+
+.avatar-upload img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: white;
+}
+
+.avatar-upload:hover .avatar-overlay {
+    opacity: 1;
+}
+
+.avatar-overlay i {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.avatar-hint {
+    color: #6B7280;
+    font-size: 0.9rem;
+}
+
+.profile-setup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.form-section {
+    border-bottom: 1px solid #E5E7EB;
+    padding-bottom: 30px;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.form-section h3 {
+    color: #1F2937;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-section h3 i {
+    color: #4F46E5;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.service-add-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 10px;
+}
+
+.services-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.service-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background: #F3F4F6;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+}
+
+.service-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #374151;
+}
+
+.service-info i {
+    color: #10B981;
+    font-size: 1.1rem;
+}
+
+.btn-remove {
+    background: transparent;
+    border: none;
+    color: #EF4444;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.btn-remove:hover {
+    background: #FEE2E2;
+}
+
+.no-services {
+    text-align: center;
+    color: #9CA3AF;
+    padding: 20px;
+    font-style: italic;
+}
+
+.availability-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.availability-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: #F3F4F6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.availability-item:hover {
+    background: #E5E7EB;
+}
+
+.availability-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.availability-item input[type="checkbox"]:checked {
+    accent-color: #4F46E5;
+}
+
+.availability-item:has(input:checked) {
+    background: #EEF2FF;
+    border-color: #4F46E5;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #D1D5DB;
+    color: #6B7280;
+}
+
+.btn-outline:hover {
+    background: #F3F4F6;
+    border-color: #9CA3AF;
+}
+
+@media (max-width: 768px) {
+    .form-row, .service-add-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .setup-container {
+        padding: 25px;
+    }
+    
+    .setup-header h1 {
+        font-size: 2rem;
     }
 }
 

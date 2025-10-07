@@ -374,7 +374,16 @@ function handleRegister(e) {
     
     updateNavigation();
     closeModal('register-modal');
-    showAlert('Uspešno ste se registrovali!', 'success');
+    
+    // Redirect to profile setup if provider
+    if (userType === 'provider') {
+        showAlert('Uspešno ste se registrovali! Sada podesite svoj profil.', 'success');
+        setTimeout(() => {
+            window.location.href = 'profile-setup.html';
+        }, 1500);
+    } else {
+        showAlert('Uspešno ste se registrovali!', 'success');
+    }
 }
 
 function handleContactForm(e) {
@@ -398,6 +407,7 @@ function updateNavigation() {
     if (currentUser) {
         navButtons.innerHTML = `
             <div class="user-menu">
+                ${currentUser.type === 'provider' ? '<span class="provider-badge"><i class="fas fa-briefcase"></i> Pružam usluge</span>' : ''}
                 <img src="${currentUser.avatar}" alt="${currentUser.name}" class="user-avatar">
                 <span style="font-weight: 500; color: #374151;">${currentUser.name}</span>
                 <div class="dropdown">
@@ -406,7 +416,7 @@ function updateNavigation() {
                         <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Moj profil</a>
                         <a href="bookings.html"><i class="fas fa-calendar-check"></i> Moje rezervacije</a>
                         <a href="#" onclick="showMessages()"><i class="fas fa-envelope"></i> Poruke</a>
-                        ${currentUser.type === 'provider' ? '<a href="#" onclick="showMyServices()"><i class="fas fa-briefcase"></i> Moje usluge</a>' : ''}
+                        ${currentUser.type === 'provider' ? '<a href="profile-setup.html"><i class="fas fa-cog"></i> Podesi profil</a>' : ''}
                         <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Odjavi se</a>
                     </div>
                 </div>
