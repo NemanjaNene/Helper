@@ -398,16 +398,16 @@ function updateNavigation() {
     if (currentUser) {
         navButtons.innerHTML = `
             <div class="user-menu">
-                <img src="${currentUser.avatar}" alt="${currentUser.name}" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-                <span>${currentUser.name}</span>
+                <img src="${currentUser.avatar}" alt="${currentUser.name}" class="user-avatar">
+                <span style="font-weight: 500; color: #374151;">${currentUser.name}</span>
                 <div class="dropdown">
                     <button class="dropdown-btn"><i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
-                        <a href="#" onclick="showProfile()">Moj profil</a>
-                        <a href="bookings.html">Moje rezervacije</a>
-                        <a href="#" onclick="showMessages()">Poruke</a>
-                        ${currentUser.type === 'provider' ? '<a href="#" onclick="showMyServices()">Moje usluge</a>' : ''}
-                        <a href="#" onclick="logout()">Odjavi se</a>
+                        <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Moj profil</a>
+                        <a href="bookings.html"><i class="fas fa-calendar-check"></i> Moje rezervacije</a>
+                        <a href="#" onclick="showMessages()"><i class="fas fa-envelope"></i> Poruke</a>
+                        ${currentUser.type === 'provider' ? '<a href="#" onclick="showMyServices()"><i class="fas fa-briefcase"></i> Moje usluge</a>' : ''}
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Odjavi se</a>
                     </div>
                 </div>
             </div>
