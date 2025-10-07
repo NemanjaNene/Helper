@@ -357,6 +357,9 @@ function handleRegister(e) {
     localStorage.setItem('helper-users', JSON.stringify(users));
     localStorage.setItem('helper-current-user', JSON.stringify(currentUser));
     
+    // Send email notification
+    sendRegistrationEmail(newUser);
+    
     updateNavigation();
     closeModal('register-modal');
     showAlert('Uspešno ste se registrovali!', 'success');
@@ -364,6 +367,14 @@ function handleRegister(e) {
 
 function handleContactForm(e) {
     e.preventDefault();
+    
+    const name = e.target.querySelector('input[placeholder="Vaše ime"]').value;
+    const email = e.target.querySelector('input[placeholder="Vaš email"]').value;
+    const message = e.target.querySelector('textarea[placeholder="Vaša poruka"]').value;
+    
+    // Send email notification
+    sendContactEmail(name, email, message);
+    
     showAlert('Poruka je uspešno poslata!', 'success');
     e.target.reset();
 }
@@ -888,4 +899,85 @@ function formatTime(timeString) {
         hour: '2-digit', 
         minute: '2-digit' 
     });
+}
+
+// Email notification functions
+function sendRegistrationEmail(user) {
+    const userTypeText = user.type === 'provider' ? 'Pruža usluge' : 'Traži usluge';
+    const now = new Date();
+    const date = now.toLocaleDateString('sr-RS');
+    const time = now.toLocaleTimeString('sr-RS');
+    
+    const subject = `Nova registracija - ${user.name}`;
+    const body = `
+NOVA REGISTRACIJA NA HELPER PLATFORMI
+=====================================
+
+👤 Ime i prezime: ${user.name}
+📧 Email: ${user.email}
+🏷️ Tip korisnika: ${userTypeText}
+📅 Datum registracije: ${date}
+⏰ Vreme: ${time}
+📍 Lokacija: ${user.location}
+
+=====================================
+Helper - Platforma za kućne usluge
+📞 +381 11 123 4567
+📍 Knez Mihailova 1, Beograd
+    `.trim();
+    
+    const mailtoLink = `mailto:nemanjanikitovic1@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoLink, '_blank');
+}
+
+function sendBookingEmail(booking) {
+    const subject = `Nova rezervacija - ${booking.providerName}`;
+    const body = `
+NOVA REZERVACIJA
+=====================================
+
+👤 Klijent: ${booking.clientName}
+📧 Email klijenta: ${booking.clientEmail}
+🔧 Pružalac usluge: ${booking.providerName}
+📅 Datum: ${booking.date}
+⏰ Vreme: ${booking.time}
+⏱️ Trajanje: ${booking.duration} sati
+💰 Ukupna cena: ${booking.totalPrice} RSD
+
+${booking.notes ? `📝 Napomena:\n${booking.notes}` : ''}
+
+=====================================
+Helper - Platforma za kućne usluge
+📞 +381 11 123 4567
+📍 Knez Mihailova 1, Beograd
+    `.trim();
+    
+    const mailtoLink = `mailto:nemanjanikitovic1@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoLink, '_blank');
+}
+
+function sendContactEmail(name, email, message) {
+    const now = new Date();
+    const date = now.toLocaleDateString('sr-RS');
+    
+    const subject = `Kontakt forma - ${name}`;
+    const body = `
+NOVA PORUKA SA KONTAKT FORME
+=====================================
+
+👤 Ime: ${name}
+📧 Email: ${email}
+📅 Datum: ${date}
+
+📝 Poruka:
+${message}
+
+=====================================
+Helper - Platforma za kućne usluge
+📞 +381 11 123 4567
+📍 Knez Mihailova 1, Beograd
+    `.trim();
+    
+    const mailtoLink = `mailto:nemanjanikitovic1@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoLink, '_blank');
 }

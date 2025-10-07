@@ -839,10 +839,50 @@
             if (selectedProvider) {
                 const totalPrice = selectedProvider.price * duration;
                 
+                // Send email notification
+                const bookingData = {
+                    clientName: 'Korisnik', // You can get from currentUser if logged in
+                    clientEmail: 'korisnik@example.com', // You can get from currentUser if logged in
+                    providerName: selectedProvider.name,
+                    date: new Date(date).toLocaleDateString('sr-RS'),
+                    time: startTime,
+                    duration: duration,
+                    totalPrice: totalPrice,
+                    notes: notes
+                };
+                
+                sendBookingEmail(bookingData);
+                
                 alert(`Rezervacija potvrđena!\n\nPružalac: ${selectedProvider.name}\nDatum: ${date}\nVreme: ${startTime}\nTrajanje: ${duration} sati\nUkupno: ${totalPrice} RSD\n\nNapomena: ${notes}`);
                 
                 document.getElementById('booking-modal').style.display = 'none';
             }
+        }
+        
+        function sendBookingEmail(booking) {
+            const subject = `Nova rezervacija - ${booking.providerName}`;
+            const body = `
+NOVA REZERVACIJA
+=====================================
+
+👤 Klijent: ${booking.clientName}
+📧 Email klijenta: ${booking.clientEmail}
+🔧 Pružalac usluge: ${booking.providerName}
+📅 Datum: ${booking.date}
+⏰ Vreme: ${booking.time}
+⏱️ Trajanje: ${booking.duration} sati
+💰 Ukupna cena: ${booking.totalPrice} RSD
+
+${booking.notes ? `📝 Napomena:\n${booking.notes}` : ''}
+
+=====================================
+Helper - Platforma za kućne usluge
+📞 +381 11 123 4567
+📍 Knez Mihailova 1, Beograd
+            `.trim();
+            
+            const mailtoLink = `mailto:nemanjanikitovic1@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink, '_blank');
         }
 
         function updateBookingSummary() {
