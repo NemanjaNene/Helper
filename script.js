@@ -539,18 +539,64 @@ function createProfilePage() {
 
         <div class="tab-content active" id="about-tab">
             <div class="container">
-                <h2>O meni</h2>
-                <p>${currentUser.description || 'Nema opisa.'}</p>
-                <div class="profile-info-grid">
-                    <div class="info-item">
-                        <strong>Lokacija:</strong> ${currentUser.location}
+                <div class="about-section">
+                    <h2>O meni</h2>
+                    <p class="description-text">${currentUser.description || 'Nema opisa.'}</p>
+                    
+                    <div class="profile-info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Lokacija</strong>
+                                <p>${currentUser.location}</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Telefon</strong>
+                                <p>${currentUser.phone || 'Nije unet'}</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <div>
+                                <strong>Član od</strong>
+                                <p>${new Date(currentUser.joined).toLocaleDateString('sr-RS')}</p>
+                            </div>
+                        </div>
+                        ${currentUser.email ? `
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>Email</strong>
+                                <p>${currentUser.email}</p>
+                            </div>
+                        </div>
+                        ` : ''}
                     </div>
-                    <div class="info-item">
-                        <strong>Telefon:</strong> ${currentUser.phone || 'Nije unet'}
+
+                    ${currentUser.type === 'provider' && currentUser.services && currentUser.services.length > 0 ? `
+                    <div class="services-section">
+                        <h3><i class="fas fa-briefcase"></i> Usluge koje pružam</h3>
+                        <div class="services-list-grid">
+                            ${currentUser.services.map(service => {
+                                const [name, price] = service.split(' - ');
+                                return `
+                                    <div class="service-card">
+                                        <div class="service-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="service-details">
+                                            <h4>${name}</h4>
+                                            <p class="service-price">${price}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <strong>Član od:</strong> ${new Date(currentUser.joined).toLocaleDateString('sr-RS')}
-                    </div>
+                    ` : ''}
                 </div>
             </div>
         </div>
