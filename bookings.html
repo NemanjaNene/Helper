@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moje rezervacije - Helper</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Helper</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Početna</a>
+                <a href="search.html" class="nav-link">Pretraga</a>
+                <div class="nav-buttons" id="nav-buttons">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Bookings Section -->
+    <section class="bookings-page">
+        <div class="container">
+            <h1 class="page-title">Moje rezervacije</h1>
+            
+            <!-- Tabs -->
+            <div class="bookings-tabs">
+                <button class="tab-btn active" onclick="switchBookingsTab('my-bookings')">
+                    <i class="fas fa-calendar-check"></i> Moje rezervacije
+                </button>
+                <button class="tab-btn" onclick="switchBookingsTab('received-bookings')">
+                    <i class="fas fa-inbox"></i> Primljene rezervacije
+                </button>
+            </div>
+
+            <!-- My Bookings Tab (as Client) -->
+            <div id="my-bookings-tab" class="bookings-tab-content active">
+                <div class="bookings-grid" id="my-bookings-grid">
+                    <!-- Bookings will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Received Bookings Tab (as Provider) -->
+            <div id="received-bookings-tab" class="bookings-tab-content">
+                <div class="bookings-grid" id="received-bookings-grid">
+                    <!-- Bookings will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rating Modal -->
+    <div id="rating-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="rating-modal-title">Oceni korisnika</h2>
+            <div class="rating-form">
+                <div class="user-info" id="rating-user-info">
+                    <!-- User info will be loaded here -->
+                </div>
+                
+                <div class="rating-stars">
+                    <label>Ocena:</label>
+                    <div class="star-rating">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                    <span class="rating-value" id="selected-rating">0</span>/5
+                </div>
+                
+                <div class="form-group">
+                    <label>Komentar (opciono):</label>
+                    <textarea id="rating-comment" rows="4" placeholder="Ostavite komentar..."></textarea>
+                </div>
+                
+                <button class="btn btn-primary" onclick="submitRating()">
+                    <i class="fas fa-check"></i> Potvrdi ocenu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        let currentRatingBooking = null;
+        let currentRatingType = null; // 'provider' or 'client'
+        let selectedRating = 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBookings();
+            setupRatingStars();
+            updateNavigation();
+        });
+
+        function loadBookings() {
+            const currentUser = JSON.parse(localStorage.getItem('helper-current-user'));
+            const bookings = JSON.parse(localStorage.getItem('helper-bookings')) || [];
+            
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Load my bookings (as client)
+            const myBookings = bookings.filter(b => b.clientId === currentUser.id);
+            displayBookings(myBookings, 'my-bookings-grid', 'client');
+            
+            // Load received bookings (as provider)
+            const receivedBookings = bookings.filter(b => b.providerId === currentUser.id);
+            displayBookings(receivedBookings, 'received-bookings-grid', 'provider');
+        }
+
+        function displayBookings(bookings, gridId, userRole) {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            if (bookings.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-bookings">
+                        <i class="fas fa-calendar-times"></i>
+                        <h3>Nema rezervacija</h3>
+                        <p>${userRole === 'client' ? 'Još niste napravili nijednu rezervaciju.' : 'Još niste primili nijednu rezervaciju.'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            bookings.forEach(booking => {
+                const card = createBookingCard(booking, userRole);
+                grid.appendChild(card);
+            });
+        }
+
+        function createBookingCard(booking, userRole) {
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+            
+            const isProvider = userRole === 'provider';
+            const otherUser = isProvider ? booking.clientName : booking.providerName;
+            const canRate = isProvider ? !booking.clientRated : !booking.providerRated;
+            
+            card.innerHTML = `
+                <div class="booking-header">
+                    <div class="booking-user">
+                        <i class="fas fa-user-circle"></i>
+                        <div>
+                            <h3>${otherUser}</h3>
+                            <p>${isProvider ? 'Klijent' : 'Pružalac usluge'}</p>
+                        </div>
+                    </div>
+                    <div class="booking-status ${booking.status}">
+                        ${getStatusText(booking.status)}
+                    </div>
+                </div>
+                <div class="booking-details">
+                    <div class="booking-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>${booking.dateFormatted}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <i class="fas fa-clock"></i>
+                        <span>${booking.time}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span>${booking.duration} sati</span>
+                    </div>
+                    <div class="booking-detail">
+                        <i class="fas fa-money-bill"></i>
+                        <span>${booking.totalPrice} RSD</span>
+                    </div>
+                </div>
+                ${booking.notes ? `
+                <div class="booking-notes">
+                    <strong>Napomena:</strong> ${booking.notes}
+                </div>
+                ` : ''}
+                <div class="booking-actions">
+                    ${canRate ? `
+                        <button class="btn btn-primary btn-small" onclick="openRatingModal(${booking.id}, '${isProvider ? 'client' : 'provider'}')">
+                            <i class="fas fa-star"></i> Oceni ${isProvider ? 'klijenta' : 'pružaoca'}
+                        </button>
+                    ` : `
+                        <span class="rated-badge">
+                            <i class="fas fa-check-circle"></i> Ocenjeno
+                        </span>
+                    `}
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Na čekanju',
+                'confirmed': 'Potvrđeno',
+                'completed': 'Završeno',
+                'cancelled': 'Otkazano'
+            };
+            return statusMap[status] || status;
+        }
+
+        function switchBookingsTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.bookings-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName + '-tab');
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+        }
+
+        function setupRatingStars() {
+            const stars = document.querySelectorAll('.star-rating i');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.getAttribute('data-rating'));
+                    updateStars(selectedRating);
+                    document.getElementById('selected-rating').textContent = selectedRating;
+                });
+                
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    updateStars(rating);
+                });
+            });
+            
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                updateStars(selectedRating);
+            });
+        }
+
+        function updateStars(rating) {
+            const stars = document.querySelectorAll('.star-rating i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('far');
+                    star.classList.add('fas');
+                } else {
+                    star.classList.remove('fas');
+                    star.classList.add('far');
+                }
+            });
+        }
+
+        function openRatingModal(bookingId, ratingType) {
+            const bookings = JSON.parse(localStorage.getItem('helper-bookings')) || [];
+            const booking = bookings.find(b => b.id === bookingId);
+            
+            if (!booking) return;
+            
+            currentRatingBooking = booking;
+            currentRatingType = ratingType;
+            selectedRating = 0;
+            
+            // Set modal title and user info
+            const isRatingClient = ratingType === 'client';
+            document.getElementById('rating-modal-title').textContent = 
+                `Oceni ${isRatingClient ? 'klijenta' : 'pružaoca'}`;
+            
+            document.getElementById('rating-user-info').innerHTML = `
+                <div class="rating-user-card">
+                    <i class="fas fa-user-circle"></i>
+                    <div>
+                        <h3>${isRatingClient ? booking.clientName : booking.providerName}</h3>
+                        <p>${isRatingClient ? 'Klijent' : 'Pružalac usluge'}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Reset stars and comment
+            updateStars(0);
+            document.getElementById('selected-rating').textContent = '0';
+            document.getElementById('rating-comment').value = '';
+            
+            // Show modal
+            document.getElementById('rating-modal').style.display = 'block';
+        }
+
+        function submitRating() {
+            if (selectedRating === 0) {
+                alert('Molimo izaberite ocenu!');
+                return;
+            }
+            
+            const comment = document.getElementById('rating-comment').value;
+            const bookings = JSON.parse(localStorage.getItem('helper-bookings')) || [];
+            const users = JSON.parse(localStorage.getItem('helper-users')) || [];
+            const currentUser = JSON.parse(localStorage.getItem('helper-current-user'));
+            
+            // Update booking
+            const bookingIndex = bookings.findIndex(b => b.id === currentRatingBooking.id);
+            if (bookingIndex === -1) return;
+            
+            if (currentRatingType === 'client') {
+                bookings[bookingIndex].clientRated = true;
+                
+                // Update client rating
+                const clientIndex = users.findIndex(u => u.id === currentRatingBooking.clientId);
+                if (clientIndex !== -1) {
+                    const currentRating = users[clientIndex].clientRating || 0;
+                    const currentReviews = users[clientIndex].clientReviews || 0;
+                    users[clientIndex].clientRating = ((currentRating * currentReviews) + selectedRating) / (currentReviews + 1);
+                    users[clientIndex].clientReviews = currentReviews + 1;
+                }
+            } else {
+                bookings[bookingIndex].providerRated = true;
+                
+                // Update provider rating
+                const providerIndex = users.findIndex(u => u.id === currentRatingBooking.providerId);
+                if (providerIndex !== -1) {
+                    const currentRating = users[providerIndex].providerRating || 0;
+                    const currentReviews = users[providerIndex].providerReviews || 0;
+                    users[providerIndex].providerRating = ((currentRating * currentReviews) + selectedRating) / (currentReviews + 1);
+                    users[providerIndex].providerReviews = currentReviews + 1;
+                }
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('helper-bookings', JSON.stringify(bookings));
+            localStorage.setItem('helper-users', JSON.stringify(users));
+            
+            // Close modal and reload bookings
+            document.getElementById('rating-modal').style.display = 'none';
+            loadBookings();
+            
+            alert('Ocena uspešno dodata!');
+        }
+
+        // Close modal when clicking X or outside
+        document.querySelectorAll('.close').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        function updateNavigation() {
+            const currentUser = JSON.parse(localStorage.getItem('helper-current-user'));
+            const navButtons = document.getElementById('nav-buttons');
+            
+            if (!navButtons) return;
+            
+            if (currentUser) {
+                navButtons.innerHTML = `
+                    <div class="user-menu">
+                        <img src="${currentUser.avatar}" alt="${currentUser.name}" class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                        <span>${currentUser.name}</span>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

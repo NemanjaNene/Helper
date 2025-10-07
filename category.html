@@ -838,21 +838,36 @@
             
             if (selectedProvider) {
                 const totalPrice = selectedProvider.price * duration;
+                const currentUser = JSON.parse(localStorage.getItem('helper-current-user'));
                 
-                // Send email notification
-                const bookingData = {
-                    clientName: 'Korisnik', // You can get from currentUser if logged in
-                    clientEmail: 'korisnik@example.com', // You can get from currentUser if logged in
+                // Create booking object
+                const booking = {
+                    id: Date.now(),
+                    clientId: currentUser ? currentUser.id : 0,
+                    clientName: currentUser ? currentUser.name : 'Gost',
+                    clientEmail: currentUser ? currentUser.email : 'gost@example.com',
+                    providerId: selectedProvider.id,
                     providerName: selectedProvider.name,
                     providerEmail: selectedProvider.email,
-                    date: new Date(date).toLocaleDateString('sr-RS'),
+                    date: date,
+                    dateFormatted: new Date(date).toLocaleDateString('sr-RS'),
                     time: startTime,
                     duration: duration,
                     totalPrice: totalPrice,
-                    notes: notes
+                    notes: notes,
+                    status: 'pending',
+                    providerRated: false,
+                    clientRated: false,
+                    createdAt: new Date().toISOString()
                 };
                 
-                sendBookingEmail(bookingData);
+                // Save booking to localStorage
+                const bookings = JSON.parse(localStorage.getItem('helper-bookings')) || [];
+                bookings.push(booking);
+                localStorage.setItem('helper-bookings', JSON.stringify(bookings));
+                
+                // Send email notification
+                sendBookingEmail(booking);
                 
                 alert(`Rezervacija potvrđena!\n\nPružalac: ${selectedProvider.name}\nDatum: ${date}\nVreme: ${startTime}\nTrajanje: ${duration} sati\nUkupno: ${totalPrice} RSD\n\nNapomena: ${notes}`);
                 
@@ -869,7 +884,7 @@ NOVA REZERVACIJA
 👤 Klijent: ${booking.clientName}
 📧 Email klijenta: ${booking.clientEmail}
 🔧 Pružalac usluge: ${booking.providerName}
-📅 Datum: ${booking.date}
+📅 Datum: ${booking.dateFormatted || booking.date}
 ⏰ Vreme: ${booking.time}
 ⏱️ Trajanje: ${booking.duration} sati
 💰 Ukupna cena: ${booking.totalPrice} RSD

@@ -4,6 +4,7 @@ let services = [];
 let users = [];
 let conversations = [];
 let currentConversation = null;
+let bookings = [];
 
 // Sample data
 const sampleServices = [
@@ -103,8 +104,10 @@ const sampleUsers = [
         avatar: "https://via.placeholder.com/120x120/4F46E5/FFFFFF?text=AM",
         location: "Beograd",
         phone: "+381 11 123 4567",
-        rating: 4.9,
-        reviews: 23,
+        providerRating: 4.9,
+        providerReviews: 23,
+        clientRating: 4.8,
+        clientReviews: 5,
         services: ["Čišćenje kuće", "Peglanje"],
         description: "Profesionalno čišćenje kuće i stanova. 5 godina iskustva. Dostupna svakim danom.",
         joined: "2023-01-15"
@@ -118,6 +121,8 @@ const sampleUsers = [
         avatar: "https://via.placeholder.com/120x120/10B981/FFFFFF?text=MP",
         location: "Novi Sad",
         phone: "+381 21 987 6543",
+        clientRating: 4.9,
+        clientReviews: 12,
         joined: "2023-02-20"
     }
 ];
@@ -134,10 +139,12 @@ function initializeApp() {
     const savedServices = localStorage.getItem('helper-services');
     const savedUsers = localStorage.getItem('helper-users');
     const savedUser = localStorage.getItem('helper-current-user');
+    const savedBookings = localStorage.getItem('helper-bookings');
     
     services = savedServices ? JSON.parse(savedServices) : sampleServices;
     users = savedUsers ? JSON.parse(savedUsers) : sampleUsers;
     currentUser = savedUser ? JSON.parse(savedUser) : null;
+    bookings = savedBookings ? JSON.parse(savedBookings) : [];
     
     // Update UI based on login status
     updateNavigation();
@@ -345,10 +352,15 @@ function handleRegister(e) {
     };
     
     if (userType === 'provider') {
-        newUser.rating = 0;
-        newUser.reviews = 0;
+        newUser.providerRating = 0;
+        newUser.providerReviews = 0;
+        newUser.clientRating = 0;
+        newUser.clientReviews = 0;
         newUser.services = [];
         newUser.description = "";
+    } else {
+        newUser.clientRating = 0;
+        newUser.clientReviews = 0;
     }
     
     users.push(newUser);
@@ -392,6 +404,7 @@ function updateNavigation() {
                     <button class="dropdown-btn"><i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
                         <a href="#" onclick="showProfile()">Moj profil</a>
+                        <a href="bookings.html">Moje rezervacije</a>
                         <a href="#" onclick="showMessages()">Poruke</a>
                         ${currentUser.type === 'provider' ? '<a href="#" onclick="showMyServices()">Moje usluge</a>' : ''}
                         <a href="#" onclick="logout()">Odjavi se</a>
