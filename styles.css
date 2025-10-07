@@ -712,10 +712,10 @@ body {
 /* Pretty radio group for register modal */
 .radio-group {
     display: inline-flex;
-    background: #F3F4F6;
-    border: 1px solid #E5E7EB;
-    padding: 6px;
-    border-radius: 9999px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
     gap: 12px;
 }
 
@@ -741,17 +741,25 @@ body {
     padding: 10px 18px;
     border-radius: 9999px;
     transition: all 0.2s ease;
-    background: transparent;
+    background: #F3F4F6;
+    border: 1px solid #E5E7EB;
 }
 
 .radio-pill input:checked + span {
     background: #4F46E5;
     color: #ffffff;
+    border-color: #4F46E5;
     box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
 }
 
 .radio-pill:hover span {
-    background: transparent;
+    background: #E5E7EB;
+    border-color: #D1D5DB;
+}
+
+.radio-pill input:checked:hover + span {
+    background: #4338CA;
+    border-color: #4338CA;
 }
 
 .radio-pill input:checked ~ span,

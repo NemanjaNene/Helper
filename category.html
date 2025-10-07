@@ -844,6 +844,7 @@
                     clientName: 'Korisnik', // You can get from currentUser if logged in
                     clientEmail: 'korisnik@example.com', // You can get from currentUser if logged in
                     providerName: selectedProvider.name,
+                    providerEmail: selectedProvider.email,
                     date: new Date(date).toLocaleDateString('sr-RS'),
                     time: startTime,
                     duration: duration,
@@ -881,7 +882,8 @@ Helper - Platforma za kućne usluge
 📍 Knez Mihailova 1, Beograd
             `.trim();
             
-            const mailtoLink = `mailto:nemanjanikitovic1@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            // Send to provider's email with CC to admin
+            const mailtoLink = `mailto:${booking.providerEmail}?cc=nemanjanikitovic1@gmail.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             window.open(mailtoLink, '_blank');
         }
 
