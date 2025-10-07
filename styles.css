@@ -85,14 +85,19 @@ body {
 .provider-badge {
     background: linear-gradient(135deg, #4F46E5, #7C3AED);
     color: white;
-    padding: 6px 12px;
+    padding: 5px 14px;
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 500;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    gap: 5px;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    white-space: nowrap;
+}
+
+.provider-badge i {
+    font-size: 0.75rem;
 }
 
 .user-avatar {
