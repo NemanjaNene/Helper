@@ -2025,6 +2025,22 @@ body {
     width: 20px;
 }
 
+.contact-note {
+    background: #EEF2FF;
+    color: #4F46E5;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.contact-note i {
+    font-size: 1rem;
+}
+
 /* Calendar Styles */
 .calendar-container {
     margin-top: 20px;

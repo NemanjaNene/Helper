@@ -176,8 +176,8 @@
                         
                         <h3>Kontakt</h3>
                         <div class="contact-info">
-                            <p><i class="fas fa-phone"></i> <span id="modal-phone"></span></p>
                             <p><i class="fas fa-envelope"></i> <span id="modal-email"></span></p>
+                            <p class="contact-note"><i class="fas fa-info-circle"></i> Kontaktirajte pružaoca usluge preko platforme ili email-a</p>
                         </div>
                     </div>
                     
@@ -601,7 +601,6 @@
             document.getElementById('modal-reviews').textContent = `(${provider.reviews} recenzija)`;
             document.getElementById('modal-price').textContent = provider.price;
             document.getElementById('modal-description').textContent = provider.description;
-            document.getElementById('modal-phone').textContent = provider.phone;
             document.getElementById('modal-email').textContent = provider.email;
             
             // Services

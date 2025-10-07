@@ -552,13 +552,6 @@ function createProfilePage() {
                             </div>
                         </div>
                         <div class="info-item">
-                            <i class="fas fa-phone"></i>
-                            <div>
-                                <strong>Telefon</strong>
-                                <p>${currentUser.phone || 'Nije unet'}</p>
-                            </div>
-                        </div>
-                        <div class="info-item">
                             <i class="fas fa-calendar"></i>
                             <div>
                                 <strong>Član od</strong>
