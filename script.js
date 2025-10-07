@@ -401,8 +401,8 @@ function updateNavigation() {
                 <img src="${currentUser.avatar}" alt="${currentUser.name}" class="user-avatar">
                 <span style="font-weight: 500; color: #374151;">${currentUser.name}</span>
                 <div class="dropdown">
-                    <button class="dropdown-btn"><i class="fas fa-chevron-down"></i></button>
-                    <div class="dropdown-content">
+                    <button class="dropdown-btn" id="dropdown-toggle"><i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-content" id="dropdown-menu">
                         <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Moj profil</a>
                         <a href="bookings.html"><i class="fas fa-calendar-check"></i> Moje rezervacije</a>
                         <a href="#" onclick="showMessages()"><i class="fas fa-envelope"></i> Poruke</a>
@@ -412,6 +412,26 @@ function updateNavigation() {
                 </div>
             </div>
         `;
+        
+        // Add click event to toggle dropdown
+        setTimeout(() => {
+            const dropdownToggle = document.getElementById('dropdown-toggle');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            
+            if (dropdownToggle && dropdownMenu) {
+                dropdownToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.dropdown')) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+        }, 100);
     } else {
         navButtons.innerHTML = `
             <button class="btn btn-outline" id="login-btn">Prijavi se</button>
