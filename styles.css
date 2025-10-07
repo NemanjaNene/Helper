@@ -2274,6 +2274,124 @@ body {
     }
 }
 
+/* Admin Login Page Styles */
+.admin-login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.admin-login-box {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.admin-login-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.admin-login-header i {
+    font-size: 64px;
+    color: #4F46E5;
+    margin-bottom: 20px;
+}
+
+.admin-login-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 10px;
+}
+
+.admin-login-header p {
+    color: #6B7280;
+    font-size: 0.95rem;
+}
+
+.admin-login-form {
+    margin-bottom: 25px;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 15px;
+    color: #6B7280;
+    font-size: 16px;
+}
+
+.input-with-icon input {
+    padding-left: 45px !important;
+}
+
+.btn-block {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+}
+
+.error-message {
+    background: #FEE2E2;
+    border: 1px solid #FCA5A5;
+    color: #991B1B;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.error-message i {
+    color: #DC2626;
+}
+
+.admin-login-footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #E5E7EB;
+}
+
+.admin-login-footer a {
+    color: #6B7280;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.admin-login-footer a:hover {
+    color: #4F46E5;
+}
+
+.admin-login-footer i {
+    margin-right: 5px;
+}
+
+/* Shake animation for wrong credentials */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
 /* Utility Classes */
 .hidden {
     display: none !important;

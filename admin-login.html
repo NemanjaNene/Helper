@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Helper</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="admin-login-box">
+            <div class="admin-login-header">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Admin Panel</h1>
+                <p>Prijavite se sa admin kredencijalima</p>
+            </div>
+            
+            <form id="admin-login-form" class="admin-login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="admin-email" placeholder="admin@helper.rs" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Lozinka</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="admin-password" placeholder="••••••••" required>
+                    </div>
+                </div>
+                
+                <div id="error-message" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Pogrešan email ili lozinka!</span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Prijavi se
+                </button>
+            </form>
+            
+            <div class="admin-login-footer">
+                <a href="index.html">
+                    <i class="fas fa-arrow-left"></i> Nazad na početnu
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            // Admin kredencijali
+            const ADMIN_EMAIL = 'nemanjanikitovic1@gmail.com';
+            const ADMIN_PASSWORD = 'Helper1102!';
+            
+            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                // Uspešna prijava
+                const adminSession = {
+                    isAdmin: true,
+                    email: ADMIN_EMAIL,
+                    loginTime: new Date().toISOString()
+                };
+                
+                localStorage.setItem('helper-admin-session', JSON.stringify(adminSession));
+                
+                // Redirect to admin panel
+                window.location.href = 'admin.html';
+            } else {
+                // Pogrešni podaci
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.style.display = 'flex';
+                
+                // Shake animation
+                const form = document.querySelector('.admin-login-box');
+                form.classList.add('shake');
+                setTimeout(() => {
+                    form.classList.remove('shake');
+                }, 500);
+                
+                // Hide error after 3 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

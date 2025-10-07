@@ -298,11 +298,42 @@
 
     <script src="script.js"></script>
     <script>
-        // Admin page specific functionality
+        // Check admin authentication
         document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAuth();
             loadAdminData();
             setupAdminEventListeners();
         });
+        
+        function checkAdminAuth() {
+            const adminSession = localStorage.getItem('helper-admin-session');
+            
+            if (!adminSession) {
+                // Not logged in - redirect to login
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            try {
+                const session = JSON.parse(adminSession);
+                
+                // Check if session is valid (less than 24 hours old)
+                const loginTime = new Date(session.loginTime);
+                const now = new Date();
+                const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
+                
+                if (hoursDiff > 24 || !session.isAdmin) {
+                    // Session expired or invalid
+                    localStorage.removeItem('helper-admin-session');
+                    window.location.href = 'admin-login.html';
+                    return;
+                }
+            } catch (error) {
+                // Invalid session data
+                localStorage.removeItem('helper-admin-session');
+                window.location.href = 'admin-login.html';
+            }
+        }
 
         function loadAdminData() {
             loadDashboardStats();
@@ -471,7 +502,8 @@
 
         function logout() {
             if (confirm('Da li ste sigurni da želite da se odjavite?')) {
-                window.location.href = 'index.html';
+                localStorage.removeItem('helper-admin-session');
+                window.location.href = 'admin-login.html';
             }
         }
     </script>
