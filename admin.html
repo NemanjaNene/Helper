@@ -244,33 +244,144 @@
             <!-- Settings Section -->
             <div id="settings-section" class="admin-section">
                 <div class="admin-header">
-                    <h1 class="admin-title">Podešavanja</h1>
+                    <h1 class="admin-title">Podešavanja Platforme</h1>
+                    <p class="admin-subtitle">Upravljaj osnovnim podešavanjima i parametrima platforme</p>
                 </div>
 
-                <div class="settings-form">
-                    <div class="form-group">
-                        <label>Naziv platforme</label>
-                        <input type="text" value="Helper" id="platform-name">
+                <div class="settings-container">
+                    <!-- Commission Settings -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <i class="fas fa-percentage"></i>
+                            <h3>Provizija platforme</h3>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="form-group">
+                                <label>Procenat provizije od svake transakcije</label>
+                                <div class="input-with-suffix">
+                                    <input type="number" min="0" max="100" value="15" id="commission-rate">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                                <small>Trenutna provizija: 15% od svake rezervacije</small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Email za kontakt</label>
-                        <input type="email" value="info@helper.rs" id="contact-email">
+
+                    <!-- Email Notifications -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <i class="fas fa-envelope"></i>
+                            <h3>Email notifikacije</h3>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="settings-toggle">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="notify-registration" checked>
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-text">Obaveštenje pri novoj registraciji</span>
+                                </label>
+                            </div>
+                            <div class="settings-toggle">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="notify-booking" checked>
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-text">Obaveštenje pri novoj rezervaciji</span>
+                                </label>
+                            </div>
+                            <div class="settings-toggle">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="notify-review" checked>
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-text">Obaveštenje pri novoj recenziji</span>
+                                </label>
+                            </div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label>Admin email za notifikacije</label>
+                                <input type="email" value="nemanjanikitovic1@gmail.com" id="admin-email">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Telefon za kontakt</label>
-                        <input type="tel" value="+381 11 123 4567" id="contact-phone">
+
+                    <!-- Platform Theme -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <i class="fas fa-palette"></i>
+                            <h3>Izgled platforme</h3>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="form-group">
+                                <label>Primarna boja</label>
+                                <div class="color-picker-group">
+                                    <input type="color" value="#4F46E5" id="primary-color">
+                                    <span class="color-preview" style="background: #4F46E5;"></span>
+                                    <span class="color-hex">#4F46E5</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Sekundarna boja</label>
+                                <div class="color-picker-group">
+                                    <input type="color" value="#7C3AED" id="secondary-color">
+                                    <span class="color-preview" style="background: #7C3AED;"></span>
+                                    <span class="color-hex">#7C3AED</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Adresa</label>
-                        <input type="text" value="Knez Mihailova 1, Beograd" id="contact-address">
+
+                    <!-- Admin Credentials -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <i class="fas fa-user-shield"></i>
+                            <h3>Admin nalog</h3>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="form-group">
+                                <label>Admin email</label>
+                                <input type="email" value="nemanjanikitovic1@gmail.com" id="admin-login-email" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Nova lozinka (ostavi prazno da zadržiš trenutnu)</label>
+                                <input type="password" placeholder="Unesi novu lozinku" id="new-admin-password">
+                            </div>
+                            <div class="form-group">
+                                <label>Potvrdi novu lozinku</label>
+                                <input type="password" placeholder="Potvrdi novu lozinku" id="confirm-admin-password">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Opis platforme</label>
-                        <textarea rows="4" id="platform-description">Platforma za povezivanje ljudi koji pružaju kućne usluge sa onima koji ih traže.</textarea>
+
+                    <!-- Platform Info -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>Informacije o platformi</h3>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="info-stats">
+                                <div class="info-stat">
+                                    <div class="info-stat-label">Verzija platforme</div>
+                                    <div class="info-stat-value">1.0.0</div>
+                                </div>
+                                <div class="info-stat">
+                                    <div class="info-stat-label">Datum pokretanja</div>
+                                    <div class="info-stat-value">${new Date().toLocaleDateString('sr-RS')}</div>
+                                </div>
+                                <div class="info-stat">
+                                    <div class="info-stat-label">Storage capacity</div>
+                                    <div class="info-stat-value" id="storage-usage">Učitavam...</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline" onclick="clearAllData()" style="margin-top: 20px; width: 100%;">
+                                <i class="fas fa-trash-alt"></i> Obriši sve demo podatke
+                            </button>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" onclick="saveSettings()">
-                        <i class="fas fa-save"></i> Sačuvaj podešavanja
-                    </button>
+
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" onclick="saveAllSettings()">
+                            <i class="fas fa-save"></i> Sačuvaj sva podešavanja
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -495,9 +606,92 @@
             }
         }
 
-        function saveSettings() {
-            showAlert('Podešavanja su sačuvana!', 'success');
+        function saveAllSettings() {
+            // Get all settings values
+            const settings = {
+                commissionRate: document.getElementById('commission-rate').value,
+                notifyRegistration: document.getElementById('notify-registration').checked,
+                notifyBooking: document.getElementById('notify-booking').checked,
+                notifyReview: document.getElementById('notify-review').checked,
+                adminEmail: document.getElementById('admin-email').value,
+                primaryColor: document.getElementById('primary-color').value,
+                secondaryColor: document.getElementById('secondary-color').value
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('helper-admin-settings', JSON.stringify(settings));
+            
+            // Check for password change
+            const newPassword = document.getElementById('new-admin-password').value;
+            const confirmPassword = document.getElementById('confirm-admin-password').value;
+            
+            if (newPassword) {
+                if (newPassword === confirmPassword) {
+                    if (newPassword.length < 8) {
+                        showAlert('Lozinka mora imati minimum 8 karaktera!', 'error');
+                        return;
+                    }
+                    // In production, this would hash the password
+                    localStorage.setItem('helper-admin-password', newPassword);
+                    showAlert('Podešavanja i lozinka su uspešno sačuvani!', 'success');
+                    
+                    // Clear password fields
+                    document.getElementById('new-admin-password').value = '';
+                    document.getElementById('confirm-admin-password').value = '';
+                } else {
+                    showAlert('Lozinke se ne poklapaju!', 'error');
+                    return;
+                }
+            } else {
+                showAlert('Podešavanja su uspešno sačuvana!', 'success');
+            }
         }
+        
+        function clearAllData() {
+            if (confirm('Da li ste sigurni da želite da obrišete SVE podatke? Ova akcija je nepovratna!')) {
+                if (confirm('POSLEDNJE UPOZORENJE: Svi korisnici, rezervacije, poruke i recenzije će biti obrisani!')) {
+                    // Keep only admin session
+                    const adminSession = localStorage.getItem('helper-admin-session');
+                    const adminPassword = localStorage.getItem('helper-admin-password');
+                    const adminSettings = localStorage.getItem('helper-admin-settings');
+                    
+                    // Clear everything
+                    localStorage.clear();
+                    
+                    // Restore admin data
+                    if (adminSession) localStorage.setItem('helper-admin-session', adminSession);
+                    if (adminPassword) localStorage.setItem('helper-admin-password', adminPassword);
+                    if (adminSettings) localStorage.setItem('helper-admin-settings', adminSettings);
+                    
+                    showAlert('Svi demo podaci su uspešno obrisani!', 'success');
+                    
+                    // Reload page to reinitialize demo data
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
+            }
+        }
+        
+        function calculateStorageUsage() {
+            let total = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    total += localStorage[key].length + key.length;
+                }
+            }
+            
+            const usedKB = (total / 1024).toFixed(2);
+            const maxKB = 5120; // 5MB typical limit
+            const percentage = ((usedKB / maxKB) * 100).toFixed(1);
+            
+            document.getElementById('storage-usage').textContent = `${usedKB} KB / ${maxKB} KB (${percentage}%)`;
+        }
+        
+        // Calculate storage on load
+        setTimeout(() => {
+            calculateStorageUsage();
+        }, 500);
 
         function loadConversations() {
             const conversations = JSON.parse(localStorage.getItem('helper-conversations')) || [];
