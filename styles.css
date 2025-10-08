@@ -1673,6 +1673,19 @@ body {
     color: #991B1B;
 }
 
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 /* Category Page Styles */
 .category-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
